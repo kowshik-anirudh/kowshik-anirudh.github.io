@@ -225,3 +225,37 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
   .js .reveal { opacity: 1; transform: none; }
 }
+
+/* ---------- Project detail pages ---------- */
+.project { padding-top: clamp(2.5rem, 8vh, 4.5rem); padding-bottom: 4rem; }
+.back { display: inline-flex; gap: .4rem; font-size: .9rem; color: var(--muted); text-decoration: none; margin-bottom: 2rem; }
+.back:hover { color: var(--accent); }
+.project h1 { font-size: clamp(2rem, 6vw, 3rem); font-weight: 700; letter-spacing: -0.02em; }
+.project .lede { color: var(--muted); font-size: 1.1rem; max-width: 40rem; margin: 1rem 0 1.5rem; }
+.project .tags { margin-bottom: 1.5rem; }
+.project h2 { font-size: 1.25rem; margin: 3rem 0 1rem; }
+.project h2 span { font-family: var(--mono); font-size: .8rem; color: var(--accent); margin-right: .6rem; }
+.project p, .project li { color: var(--muted); }
+.project strong { color: var(--text); font-weight: 500; }
+.project ul.points { display: grid; gap: .6rem; }
+.project ul.points li { position: relative; padding-left: 1.2rem; }
+.project ul.points li::before { content: ""; position: absolute; left: 0; top: .7em; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); opacity: .7; }
+.project code { font-family: var(--mono); font-size: .85em; background: var(--bg-elev-2); border: 1px solid var(--line); padding: .1em .35em; border-radius: 5px; color: var(--text); }
+
+/* Pipeline / architecture flow */
+.flow { display: grid; gap: .6rem; counter-reset: step; margin: 1rem 0; }
+@media (min-width: 720px) { .flow { grid-auto-flow: column; grid-auto-columns: 1fr; } }
+.flow li { counter-increment: step; position: relative; background: var(--bg-elev); border: 1px solid var(--line); border-radius: var(--radius); padding: 1rem; font-size: .9rem; color: var(--muted); }
+.flow li::before { content: counter(step, decimal-leading-zero); display: block; font-family: var(--mono); font-size: .75rem; color: var(--accent); margin-bottom: .35rem; }
+.flow li strong { display: block; color: var(--text); margin-bottom: .25rem; }
+
+.shots { display: grid; gap: 1rem; margin-top: 1rem; }
+@media (min-width: 720px) { .shots { grid-template-columns: 1fr 1fr; } .shots .wide { grid-column: 1 / -1; } }
+.shots figure { margin: 0; background: var(--bg-elev); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.shots img { width: 100%; height: auto; }
+.shots figcaption { font-size: .8rem; color: var(--faint); padding: .6rem .9rem; font-family: var(--mono); }
+
+.project-nav { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-top: 4rem; padding-top: 1.5rem; border-top: 1px solid var(--line); }
+.project-nav a { color: var(--accent); text-decoration: none; font-size: .9rem; }
+.project-nav a:hover { text-decoration: underline; }
+.project > * { animation: rise .8s var(--ease) both; }

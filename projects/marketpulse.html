@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MarketPulse | Anirudh Kowshik</title>
+  <meta name="description" content="MarketPulse: a serverless app that turns live stock data and technical indicators into plain-language AI summaries. Python, FastAPI, AWS Lambda, S3, OpenAI.">
+  <meta name="theme-color" content="#0b0c0f">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a class="brand" href="../">AK</a>
+      <nav aria-label="Primary">
+        <ul>
+          <li><a href="../#about">About</a></li>
+          <li><a href="../#projects">Projects</a></li>
+          <li><a href="../#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="project wrap">
+    <a class="back" href="../#projects">&larr; All projects</a>
+    <p class="eyebrow">Project &middot; Serverless &middot; LLM</p>
+    <h1>MarketPulse</h1>
+    <p class="lede">A serverless app that turns live market data into a short, evidence-based trader's brief. It computes technical indicators from raw price data, then has an LLM explain them in plain language with no invented numbers.</p>
+    <ul class="tags"><li>Python</li><li>FastAPI</li><li>AWS Lambda</li><li>API Gateway</li><li>S3</li><li>AWS SAM</li><li>OpenAI API</li><li>pandas</li><li>Plotly</li></ul>
+    <div class="cta">
+      <a class="btn btn-primary" href="https://kowshik-anirudh.github.io/ai-stock-storyteller/" target="_blank" rel="noopener">Live demo</a>
+      <a class="btn" href="https://github.com/kowshik-anirudh/ai-stock-storyteller" target="_blank" rel="noopener">Source code</a>
+    </div>
+
+    <h2><span>01</span>The problem</h2>
+    <p>Most trading dashboards show numbers and leave the interpretation to you. MarketPulse explains what's happening in a stock (momentum, volatility, risk, key levels) in a few sentences, backed by the actual figures and an interactive chart.</p>
+
+    <h2><span>02</span>Architecture</h2>
+    <ol class="flow">
+      <li><strong>Static frontend</strong>Hosted on GitHub Pages. Ticker search with instant autocomplete from a preloaded list.</li>
+      <li><strong>API Gateway</strong>Routes <code>GET /api/story/{ticker}</code> and a health check to Lambda.</li>
+      <li><strong>Lambda (FastAPI)</strong>Fetches price history, computes indicators, and calls the LLM.</li>
+      <li><strong>S3 cache</strong>Stores each result for 30 minutes so repeat lookups skip the data fetch and LLM call.</li>
+    </ol>
+    <p>The backend is a FastAPI app adapted to Lambda with Mangum. All infrastructure is defined as code in an AWS SAM template, including the encrypted, private S3 bucket and a least-privilege IAM role that can only read and write cache objects and logs.</p>
+
+    <h2><span>03</span>How it works</h2>
+    <ul class="points">
+      <li><strong>Market data with a fallback.</strong> Pulls daily price and volume history through yfinance. If that fails, it falls back to Yahoo's chart API directly, so one flaky source doesn't take the app down.</li>
+      <li><strong>Indicators computed in pandas and NumPy.</strong> Returns over 5 days to 6 months, 20/50/200-day moving averages and trend slope, RSI-14, ATR-14, 30-day realized volatility, year-to-date max drawdown, 20-day support and resistance, volume versus its 20-day average, and beta and relative strength against SPY.</li>
+      <li><strong>Grounded LLM summaries.</strong> The computed facts are passed to the model with a prompt that requires JSON-only output (title, TL;DR, narrative, positives, risks, tags), tells it to use only the numbers provided, and rules out advice or price targets. That keeps the output structured for the UI and stops the model from inventing figures.</li>
+      <li><strong>Graceful degradation.</strong> If the OpenAI quota or rate limit is hit, the API still returns a data-only summary instead of an error.</li>
+      <li><strong>Interactive frontend.</strong> Candlestick and line charts in Plotly, green/red price coloring, and a key-facts panel with tooltips that explain each metric.</li>
+    </ul>
+
+    <h2><span>04</span>Screenshots</h2>
+    <div class="shots">
+      <figure class="wide"><img src="../images/projects/marketpulse-landing.jpg" alt="MarketPulse landing page with ticker search" width="1374" height="888" loading="lazy"><figcaption>Landing page</figcaption></figure>
+      <figure class="wide"><img src="../images/projects/marketpulse-chart.jpg" alt="Interactive candlestick price chart" width="1233" height="575" loading="lazy"><figcaption>Interactive price chart</figcaption></figure>
+      <figure><img src="../images/projects/marketpulse-summary.jpg" alt="AI-generated stock summary" width="546" height="884" loading="lazy"><figcaption>AI summary</figcaption></figure>
+      <figure><img src="../images/projects/marketpulse-facts.jpg" alt="Key facts panel with tooltips" width="530" height="551" loading="lazy"><figcaption>Key facts panel</figcaption></figure>
+    </div>
+
+    <div class="project-nav">
+      <a href="../#projects">&larr; Back to all projects</a>
+      <a href="https://github.com/kowshik-anirudh/ai-stock-storyteller" target="_blank" rel="noopener">View the code on GitHub &rarr;</a>
+    </div>
+  </main>
+</body>
+</html>
