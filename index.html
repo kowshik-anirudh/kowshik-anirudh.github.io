@@ -37,6 +37,7 @@
         <ul>
           <li><a href="#about">About</a></li>
           <li><a href="#experience">Experience</a></li>
+          <li><a href="#skills">Skills</a></li>
           <li><a href="#projects">Projects</a></li>
           <li><a href="#reading">Reading</a></li>
           <li><a href="#beyond">Off the clock</a></li>
@@ -87,13 +88,12 @@
       <div class="section-grid">
         <header class="sec-head"><span class="sec-num">01</span><h2 id="about-h">About</h2></header>
         <div>
-          <p class="sec-line">I validate the racks modern AI runs on. <em>Then I try to break them before anyone else can.</em></p>
+          <p class="sec-line">I validate the AI racks that <em>training and inference run on.</em></p>
           <div class="about-grid">
             <div class="prose">
-              <p><strong>My job is the stretch between &ldquo;it boots&rdquo; and &ldquo;ship it at scale.&rdquo;</strong> At Quanta I've taken NVIDIA GB300 and VR200 AI racks and Meta OCP server platforms through NPI, and validated custom ASIC-based racks through EVT, DVT and PVT up to mass production.</p>
-              <p><strong>I work from the signal up.</strong> I PXE-boot multi-host racks for L10&ndash;L12 bring-up, verify RDMA/RoCE across the rack, chase NVLink switch fabric issues with NVIDIA Fabric Manager, and isolate PCIe, NIC, NVMe and retimer link failures with PRBS/SerDes testing. If I do something twice, I script it. If the team does it twice, it goes in the framework.</p>
-              <p><strong>I took the scenic route to hardware.</strong> Production Kubernetes at Unisys, data pipelines at DLL, a production RAG assistant at ResMed. So when a &ldquo;hardware bug&rdquo; turns out to be software, or the other way round, I don't need a handoff.</p>
-              <p><strong>I'm also doing an executive PhD</strong> in Information Technology (Computer Engineering) at the University of the Cumberlands, because one full-time job felt quiet.</p>
+              <p>I'm a systems validation engineer at Quanta Manufacturing in Fremont, California. I've taken NVIDIA GB300 and VR200 racks and Meta OCP server platforms through NPI: bringing racks up, verifying their RDMA/RoCE and NVLink fabrics, hardening BMC firmware, and tracing link failures down to PCIe and SerDes. Large AI jobs depend on every GPU and link in a rack working correctly, and validation is where problems get caught before they reach a production cluster.</p>
+              <p>I came to hardware through software: production Kubernetes on AKS and OpenShift at Unisys, Kafka-based data pipelines into Azure at DLL, then a production RAG assistant at ResMed. That range helps in validation. When a failure crosses the line between hardware, firmware and software, I can follow it across instead of handing it off, and I turn repetitive checks into Python and Bash automation so results stay repeatable from build to build.</p>
+              <p>Next, I want to keep building in AI infrastructure: rack-scale systems, GPU fabrics and the reliability of the clusters built from them. Alongside my job, I'm pursuing an executive PhD in Information Technology, with a concentration in Computer Engineering, at the University of the Cumberlands.</p>
             </div>
             <aside class="stack" aria-label="Layers of the stack I have worked across">
               <p class="stack-title"><span>The stack I've touched</span><span aria-hidden="true">6U</span></p>
@@ -117,70 +117,77 @@
       <div class="section-grid">
         <header class="sec-head"><span class="sec-num">02</span><h2 id="exp-h">Experience</h2></header>
         <div>
-          <p class="sec-line">Four companies, one habit: <em>find the failure before the customer does.</em></p>
+          <p class="sec-line">Five-plus years across AI hardware validation, cloud platforms, data engineering and ML.</p>
           <ol class="timeline">
             <li class="role current">
               <div class="role-meta">
-                <span class="role-when">Jan 2026 &ndash; now</span>
+                <span class="role-when">Jan 2026 &ndash; Present</span>
                 <span class="role-org">Quanta Manufacturing</span>
                 <span class="role-where">Fremont, CA</span>
               </div>
               <div>
                 <div class="role-head"><h3>Systems Validation Engineer</h3><span class="impact"><b>GB300 &middot; VR200 &middot; OCP</b></span></div>
-                <p class="headline">Took NVIDIA GB300 and VR200 AI racks and Meta OCP server platforms through NPI toward mass production.</p>
+                <p class="headline">Took NVIDIA GB300 and VR200 AI racks and Meta OCP server platforms through NPI toward mass production, gating each build with test plans, firmware validation and failure debug, and driving fixes back to hardware and firmware teams.</p>
                 <ul>
-                  <li>Validated custom ASIC-based racks through EVT, DVT and PVT, up to mass production.</li>
-                  <li>Used PXE boot for multi-host L10&ndash;L12 rack bring-up and verified RDMA/RoCE networking across the rack.</li>
-                  <li>Debugged NVLink switch fabric issues with NVIDIA Fabric Manager; isolated PCIe, NIC, NVMe and retimer link failures with PRBS/SerDes testing.</li>
-                  <li>Validated BMC firmware (Redfish, IPMI, SOL) and other firmware; built Python/Bash automation and a Python/YAML test framework.</li>
+                  <li><b>Rack bring-up.</b> Validated custom ASIC-based racks through every development phase (EVT, DVT, PVT) up to mass production, using PXE network boot to provision multi-host test environments for L10&ndash;L12 rack bring-up.</li>
+                  <li><b>RDMA/RoCE networking.</b> Verified RDMA/RoCE across NICs, network modules and the full rack topology on every build, catching link, connectivity and configuration failures at rack level before they could reach production AI clusters.</li>
+                  <li><b>NVLink fabric.</b> Debugged NVLink switch fabric issues with NVIDIA Fabric Manager, tracing GPUs that failed to join the fabric back to link, firmware or configuration faults, so each rack came up with every GPU on the NVLink fabric.</li>
+                  <li><b>Signal integrity.</b> Isolated PCIe, NIC, NVMe and retimer link failures with PRBS/SerDes testing, root-causing issues across hardware, firmware and test infrastructure so fixes landed in the next board rev or firmware RC.</li>
+                  <li><b>BMC firmware.</b> Hardened BMC firmware across release candidates by validating Redfish, IPMI, SOL and out-of-band management end to end, including sensors, telemetry and BMC&ndash;BIOS/CPLD/BIC interactions on production-intent hardware.</li>
+                  <li><b>Test automation.</b> Replaced repetitive manual checks with Python/Bash automation, a hardened Python/YAML test framework and log-parsing tooling, making rack-level validation results repeatable across builds and cutting manual test effort.</li>
                 </ul>
-                <ul class="tags" aria-label="Tools"><li>NVLink</li><li>RDMA/RoCE</li><li>PRBS/SerDes</li><li>Redfish</li><li>IPMI</li><li>PXE</li><li>Python</li><li>Bash</li></ul>
+                <ul class="tags" aria-label="Tools"><li>NVLink</li><li>NVIDIA Fabric Manager</li><li>RDMA/RoCE</li><li>PRBS/SerDes</li><li>PCIe</li><li>NVMe</li><li>Redfish</li><li>IPMI</li><li>PXE</li><li>Python</li><li>Bash</li></ul>
               </div>
             </li>
             <li class="role">
               <div class="role-meta">
                 <span class="role-when">Oct 2024 &ndash; Dec 2025</span>
                 <span class="role-org">ResMed</span>
+                <span class="role-where">Remote</span>
               </div>
               <div>
-                <div class="role-head"><h3>Data Scientist</h3><span class="impact"><b>&minus;40%</b> hallucinations</span></div>
-                <p class="headline">Launched Dawn, a production RAG patient-support assistant built on LangChain, Amazon Bedrock and OpenSearch.</p>
+                <div class="role-head"><h3>Data Scientist</h3><span class="impact"><b>&minus;40%</b> LLM hallucinations</span></div>
+                <p class="headline">Launched Dawn, a production RAG patient-support assistant built on LangChain, Amazon Bedrock Titan embeddings and OpenSearch Serverless, giving patients safe, context-aware answers grounded in retrieved support content.</p>
                 <ul>
-                  <li>Cut hallucinations 40% with prompt design and guardrails.</li>
-                  <li>Ran A/B tests that lifted conversion 17% and cut customer acquisition cost 12%.</li>
-                  <li>Built forecasting models with ARIMA, Prophet and XGBoost, plus PyTorch modeling.</li>
+                  <li><b>LLM safety.</b> Cut LLM hallucinations by 40% by designing system prompts and safety guardrails, keeping patient-facing answers compliant.</li>
+                  <li><b>Experimentation.</b> Designed and analyzed A/B tests that lifted marketing conversion 17% and lowered customer acquisition cost 12%.</li>
+                  <li><b>Forecasting.</b> Built ARIMA, Prophet and XGBoost demand forecasts in Python (PyTorch, NumPy, pandas, scikit-learn) on historical sales and patient-adoption data, giving the business forecasts that enabled strategic production planning.</li>
                 </ul>
-                <ul class="tags" aria-label="Tools"><li>LangChain</li><li>Amazon Bedrock</li><li>OpenSearch</li><li>PyTorch</li><li>XGBoost</li></ul>
+                <ul class="tags" aria-label="Tools"><li>LangChain</li><li>Amazon Bedrock</li><li>OpenSearch</li><li>RAG</li><li>PyTorch</li><li>XGBoost</li><li>Python</li></ul>
               </div>
             </li>
             <li class="role">
               <div class="role-meta">
                 <span class="role-when">Jun 2023 &ndash; Jun 2024</span>
                 <span class="role-org">DLL</span>
+                <span class="role-where">Wayne, PA</span>
               </div>
               <div>
                 <div class="role-head"><h3>Data Engineer</h3><span class="impact"><b>5M+</b> records migrated</span></div>
-                <p class="headline">Migrated 5M+ records from Oracle to Azure Data Lake with Kafka and MirrorMaker.</p>
+                <p class="headline">Migrated 5M+ insurance records from Oracle to Azure Data Lake Gen2 with real-time Kafka/MirrorMaker replication, giving analysts cloud-native access to data that previously lived only in Oracle.</p>
                 <ul>
-                  <li>Set SQL/ETL standards that were adopted across 5 projects.</li>
+                  <li><b>Reporting performance.</b> Sped up downstream Power BI reporting by tuning complex SQL in the Azure Data Factory pipelines feeding the dashboards.</li>
+                  <li><b>Engineering standards.</b> Authored team-wide SQL and ETL coding standards that were adopted across 5 projects, raising peer-review code quality.</li>
                 </ul>
-                <ul class="tags" aria-label="Tools"><li>Kafka</li><li>MirrorMaker</li><li>Azure Data Lake</li><li>Oracle</li><li>SQL</li></ul>
+                <ul class="tags" aria-label="Tools"><li>Kafka</li><li>MirrorMaker</li><li>Azure Data Lake Gen2</li><li>Azure Data Factory</li><li>Oracle</li><li>SQL</li><li>Power BI</li></ul>
               </div>
             </li>
             <li class="role">
               <div class="role-meta">
                 <span class="role-when">Sep 2020 &ndash; Jul 2022</span>
                 <span class="role-org">Unisys</span>
+                <span class="role-where">Remote (India)</span>
               </div>
               <div>
-                <div class="role-head"><h3>Software Engineer</h3><span class="impact"><b>&minus;35%</b> cluster overhead</span></div>
-                <p class="headline">Ran production Kubernetes on AKS and OpenShift.</p>
+                <div class="role-head"><h3>Software Engineer</h3><span class="impact"><b>&minus;35%</b> cluster-management overhead</span></div>
+                <p class="headline">Kept multi-cluster production Kubernetes on AKS and Red Hat OpenShift reliable and recoverable, provisioning clusters with Velero-based disaster recovery and resilient persistent storage on Rook and Longhorn.</p>
                 <ul>
-                  <li>Built a hybrid dashboard that cut cluster-management overhead 35%.</li>
-                  <li>Cut manual credential work 60% with Vault and Consul.</li>
-                  <li>Added Trivy scanning to CI/CD and cut release effort 20%.</li>
+                  <li><b>Multi-cloud visibility.</b> Cut cluster-management overhead 35% by building a hybrid dashboard giving one view of every cluster across clouds.</li>
+                  <li><b>Secrets management.</b> Reduced manual credential work 60% across cross-platform services by moving secrets and service discovery onto HashiCorp Vault and Consul, so services pulled credentials securely instead of relying on hand-managed secrets.</li>
+                  <li><b>Release security.</b> Cut release-cycle effort 20% by building automated Trivy vulnerability scanning into the Azure DevOps release pipeline, keeping every production workload compliant on each release without manual security reviews.</li>
+                  <li><b>Networking and on-call.</b> Kept production traffic flowing by owning Calico networking, network policies and ingress, shipping infrastructure changes through Terraform and Helm, and leading on-call root-cause analysis across clusters with ELK and Falco.</li>
                 </ul>
-                <ul class="tags" aria-label="Tools"><li>Kubernetes</li><li>AKS</li><li>OpenShift</li><li>Vault</li><li>Consul</li><li>Trivy</li></ul>
+                <ul class="tags" aria-label="Tools"><li>Kubernetes</li><li>AKS</li><li>OpenShift</li><li>Velero</li><li>Vault</li><li>Consul</li><li>Terraform</li><li>Helm</li><li>Calico</li><li>Trivy</li><li>ELK</li><li>Falco</li></ul>
               </div>
             </li>
           </ol>
@@ -194,9 +201,37 @@
             </ul>
             <figure class="edu-photo">
               <img src="images/education.jpg" alt="Anirudh in cap and gown at a Penn State commencement" width="1200" height="900" loading="lazy" decoding="async" onerror="this.remove()">
-              <figcaption>Penn State commencement. The gown did not pass thermal validation.</figcaption>
+              <figcaption>Penn State commencement.</figcaption>
             </figure>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Skills -->
+    <section class="section wrap reveal" id="skills" aria-labelledby="skills-h">
+      <div class="section-grid">
+        <header class="sec-head"><span class="sec-num">03</span><h2 id="skills-h">Skills</h2></header>
+        <div>
+          <p class="sec-line">From the rack and its fabrics up through the platform and software layers.</p>
+          <dl class="skills">
+            <div class="skill-group primary">
+              <dt>AI hardware &amp; validation</dt>
+              <dd><ul><li>NVIDIA GB300/VR200 racks</li><li>OCP servers</li><li>NPI (EVT/DVT/PVT)</li><li>ASIC-based rack validation</li><li>L10&ndash;L12 bring-up</li><li>PXE</li><li>PRBS/SerDes</li><li>PCIe</li><li>NVMe</li><li>BIOS</li><li>CPLD</li><li>BMC (Redfish, IPMI, SOL)</li></ul></dd>
+            </div>
+            <div class="skill-group primary">
+              <dt>Networking</dt>
+              <dd><ul><li>NVLink</li><li>NVSwitch</li><li>NVIDIA Fabric Manager</li><li>RDMA</li><li>RoCE</li><li>NCCL</li><li>Calico CNI</li><li>Kubernetes network policies</li></ul></dd>
+            </div>
+            <div class="skill-group">
+              <dt>Cloud &amp; platform</dt>
+              <dd><ul><li>Kubernetes (AKS, OpenShift)</li><li>Helm</li><li>Terraform</li><li>Ansible</li><li>Vault</li><li>Docker</li><li>CI/CD (Azure DevOps, Jenkins, GitHub Actions)</li><li>ELK</li><li>Falco</li><li>AWS</li><li>Azure</li><li>GCP</li></ul></dd>
+            </div>
+            <div class="skill-group">
+              <dt>Programming &amp; ML</dt>
+              <dd><ul><li>Python</li><li>Bash</li><li>SQL</li><li>Linux</li><li>PyTorch</li><li>NumPy</li><li>pandas</li><li>scikit-learn</li><li>XGBoost</li><li>LangChain</li><li>RAG</li><li>LLMs</li><li>Kafka</li></ul></dd>
+            </div>
+          </dl>
         </div>
       </div>
     </section>
@@ -204,7 +239,7 @@
     <!-- Projects -->
     <section class="section wrap reveal" id="projects" aria-labelledby="proj-h">
       <div class="section-grid">
-        <header class="sec-head"><span class="sec-num">03</span><h2 id="proj-h">Projects</h2></header>
+        <header class="sec-head"><span class="sec-num">04</span><h2 id="proj-h">Projects</h2></header>
         <div>
           <p class="sec-line">Most of my validation work lives behind an NDA. <em>These I built in the open.</em></p>
 
@@ -256,7 +291,7 @@
     <!-- Reading -->
     <section class="section wrap reveal" id="reading" aria-labelledby="read-h">
       <div class="section-grid">
-        <header class="sec-head"><span class="sec-num">04</span><h2 id="read-h">Reading</h2></header>
+        <header class="sec-head"><span class="sec-num">05</span><h2 id="read-h">Reading</h2></header>
         <div>
           <p class="sec-line">The fabrics and failure modes <em>I keep bringing up at lunch.</em></p>
           <ul class="reading">
@@ -310,7 +345,7 @@
     <!-- Beyond work -->
     <section class="section wrap reveal" id="beyond" aria-labelledby="beyond-h">
       <div class="section-grid">
-        <header class="sec-head"><span class="sec-num">05</span><h2 id="beyond-h">Off the clock</h2></header>
+        <header class="sec-head"><span class="sec-num">06</span><h2 id="beyond-h">Off the clock</h2></header>
         <div>
           <p class="sec-line">Uptime matters. <em>So does downtime.</em></p>
           <div class="mosaic">
@@ -338,7 +373,7 @@
     <!-- Contact -->
     <section class="section wrap reveal contact" id="contact" aria-labelledby="contact-h">
       <div class="section-grid">
-        <header class="sec-head"><span class="sec-num">06</span><h2 id="contact-h">Contact</h2></header>
+        <header class="sec-head"><span class="sec-num">07</span><h2 id="contact-h">Contact</h2></header>
         <div>
           <p class="contact-line">Building the racks, fabrics or clusters AI runs on? <em>Let's talk.</em></p>
           <p class="note">Rack-scale validation, AI fabrics, cluster reliability, or a good techno set: I'm happy to talk about any of them. LinkedIn is the fastest way to reach me.</p>

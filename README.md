@@ -4,9 +4,8 @@ A static, single-page site with plain HTML, CSS and a small JS file. It has no f
 
 ```
 website/
-  index.html        home page (hero, about, experience, projects, reading, off the clock, contact)
+  index.html        home page (hero, about, experience, skills, projects, reading, off the clock, contact)
   projects/*.html   project case studies (share style.css)
-  404.html          custom "link down" page (uses root-absolute paths, so GitHub Pages can serve it at any depth)
   style.css         dark theme, layout, motion (respects prefers-reduced-motion)
   script.js         scroll reveal + nav highlight (optional; the page works without it)
   favicon.svg       eye-diagram favicon
@@ -79,3 +78,4 @@ Check GitHub's current docs before changing DNS: https://docs.github.com/en/page
 
 - **Reading list:** each entry in `#reading` has a title link, source, date and a one-line note. Refresh it every few months so it stays current.
 - **Projects:** add an `<article class="card">` in `#projects`. The grid adapts automatically.
+- **Skills:** the `#skills` section mirrors the skill groups in the resume. Groups marked `primary` (hardware validation, networking) get the accent styling; keep them first.

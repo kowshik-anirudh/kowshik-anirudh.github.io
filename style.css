@@ -240,14 +240,15 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .role-when { font-family: var(--mono); font-size: var(--fs-xs); color: var(--faint); letter-spacing: .04em; }
 .role-org { font-weight: 600; font-size: var(--fs-md); }
 .role-where { font-size: .8rem; color: var(--faint); }
-.role h3 { font-size: var(--fs-base); font-weight: 500; color: var(--muted); margin-bottom: .55rem; }
-.role-head { display: flex; align-items: baseline; justify-content: space-between; gap: .4rem 1.5rem; flex-wrap: wrap; }
+.role h3 { font-size: var(--fs-base); font-weight: 500; color: var(--muted); }
+.role-head { display: flex; align-items: baseline; justify-content: space-between; gap: .5rem 1.5rem; flex-wrap: wrap; margin-bottom: .6rem; }
 .impact { display: inline-flex; align-items: baseline; gap: .5rem; font-family: var(--mono); font-size: var(--fs-xs); color: var(--accent); border: 1px solid var(--accent-line); background: var(--accent-soft); border-radius: 999px; padding: .2rem .7rem; white-space: nowrap; }
 .impact b { font-weight: 500; font-size: .85rem; }
 .headline { color: var(--text); font-size: 1.04rem; line-height: 1.5; margin-bottom: .75rem; max-width: 46rem; }
 .role ul { display: grid; gap: .35rem; }
 .role li { position: relative; padding-left: 1.1rem; color: var(--muted); font-size: .95rem; max-width: 46rem; }
 .role li::before { content: ""; position: absolute; left: 0; top: .72em; width: 6px; height: 1px; background: var(--accent); }
+.role li b { color: var(--text); font-weight: 500; }
 .role.current .role-when { color: var(--accent); }
 .role.current .role-when::before { content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); margin-right: .45rem; vertical-align: .1em; box-shadow: 0 0 8px rgba(124,196,184,.7); }
 .tags { display: flex; flex-wrap: wrap; gap: .4rem; margin: 1rem 0 0; }
@@ -258,6 +259,19 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .role ul.tags { display: flex; gap: .4rem; }
 .role .tags li { padding: .2rem .65rem; font-size: .72rem; max-width: none; color: var(--muted); }
 .role .tags li::before { display: none; }
+
+/* ---------- Skills ---------- */
+.skill-group { display: grid; gap: .8rem 2rem; padding: 1.5rem 0; border-top: 1px solid var(--line); }
+.skill-group:last-child { border-bottom: 1px solid var(--line); }
+@media (min-width: 720px) { .skill-group { grid-template-columns: 170px minmax(0, 1fr); } }
+.skill-group dt { font-weight: 600; font-size: 1rem; line-height: 1.4; padding-top: .15rem; }
+.skill-group dd { margin: 0; }
+.skills ul { display: flex; flex-wrap: wrap; gap: .45rem; }
+.skills li { font-size: .76rem; padding: .3rem .75rem; line-height: 1.4; transition: border-color .25s var(--ease), color .25s var(--ease), background .25s var(--ease); }
+.skills li:hover { border-color: var(--accent-line); color: var(--text); }
+@media (max-width: 480px) { .skills li { font-size: .7rem; padding: .3rem .65rem; } }
+.skill-group.primary li { color: var(--text); border-color: var(--accent-line); background: var(--accent-soft); }
+.skill-group.primary dt::before { content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); margin-right: .55rem; vertical-align: .15em; box-shadow: 0 0 8px rgba(124,196,184,.7); }
 
 /* Education */
 .edu-wrap { display: grid; gap: 1.5rem; align-items: center; }
@@ -402,14 +416,6 @@ a:hover .arrow, .card:hover .arrow { transform: translateX(3px); }
 .project-nav a:hover { text-decoration: underline; }
 .project > * { animation: rise .7s var(--ease) both; }
 .project .note { margin-top: 3rem; font-size: .85rem; color: var(--faint); }
-
-/* ---------- 404 ---------- */
-.notfound { min-height: calc(100vh - var(--nav-h) - 8rem); display: grid; align-content: center; padding-top: 3rem; padding-bottom: 3rem; position: relative; isolation: isolate; }
-.notfound .eye { opacity: .35; }
-.notfound .code { font-family: var(--mono); font-size: var(--fs-xs); color: var(--accent); letter-spacing: .08em; text-transform: uppercase; margin-bottom: 1rem; }
-.notfound h1 { font-size: clamp(2.2rem, 1.4rem + 4vw, 3.6rem); letter-spacing: -0.035em; max-width: 16ch; }
-.notfound p { color: var(--muted); max-width: 34rem; margin-top: 1rem; }
-.notfound pre { font-family: var(--mono); font-size: .78rem; color: var(--faint); background: var(--bg-elev); border: 1px solid var(--line); border-radius: var(--radius); padding: 1rem 1.1rem; overflow-x: auto; max-width: 34rem; margin: 1.5rem 0 0; }
 
 /* ---------- Reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
