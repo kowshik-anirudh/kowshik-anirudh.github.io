@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tokyo Olympics Analytics on Azure | Anirudh Kowshik</title>
+  <meta name="description" content="End-to-end Azure pipeline: Data Factory ingestion, ADLS Gen2, Databricks PySpark and Synapse Analytics.">
+  <meta name="theme-color" content="#0b0c0f">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a class="brand" href="../">AK</a>
+      <nav aria-label="Primary">
+        <ul>
+          <li><a href="../#about">About</a></li>
+          <li><a href="../#projects">Projects</a></li>
+          <li><a href="../#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="project wrap">
+    <a class="back" href="../#projects">&larr; All projects</a>
+    <p class="eyebrow">Project &middot; Data engineering &middot; Azure</p>
+    <h1>Tokyo Olympics Analytics on Azure</h1>
+    <p class="lede">An end-to-end Azure pipeline over the Tokyo 2020 Olympics dataset (11,000+ athletes, 47 disciplines, 743 teams), from ingestion with Data Factory through Spark transformations in Databricks to SQL analytics in Synapse.</p>
+    <ul class="tags"><li>Azure Data Factory</li><li>ADLS Gen2</li><li>Databricks</li><li>PySpark</li><li>Synapse Analytics</li><li>SQL</li></ul>
+    <div class="cta">
+      <a class="btn btn-primary" href="https://github.com/kowshik-anirudh/Data-Engineering-Projects/tree/main/tokyo_olympics_de_project-main" target="_blank" rel="noopener">Source code</a>
+    </div>
+
+    <h2><span>01</span>Architecture</h2>
+    <ol class="flow">
+      <li><strong>Ingest</strong>Data Factory copy activities pull five CSV datasets over HTTP into ADLS Gen2.</li>
+      <li><strong>Store</strong>The data lake holds separate raw and transformed zones.</li>
+      <li><strong>Transform</strong>Databricks mounts the lake with a service principal and processes the data in PySpark.</li>
+      <li><strong>Analyze</strong>Synapse lake database tables over the transformed data, queried with SQL.</li>
+    </ol>
+
+    <h2><span>02</span>How it works</h2>
+    <ul class="points">
+      <li><strong>Ingestion:</strong> a single Data Factory pipeline chains copy activities for athletes, coaches, teams, medals and entries by gender, landing them in the raw zone.</li>
+      <li><strong>Secure lake access:</strong> Databricks mounts ADLS Gen2 with OAuth through an Azure AD service principal, with credentials read from a Databricks secret scope.</li>
+      <li><strong>Transformation:</strong> PySpark reads each dataset with schema inference, checks the schemas, and writes cleaned outputs to the transformed zone.</li>
+      <li><strong>Analytics:</strong> SQL in Synapse covers medal tables by country, athletes and coaches per country, and gender balance by discipline.</li>
+    </ul>
+
+    <p class="note">Started as a guided learning project. Sources are credited in the repository.</p>
+    <div class="project-nav">
+      <a href="../#projects">&larr; Back to all projects</a>
+      <a href="marketpulse.html">Next: MarketPulse &rarr;</a>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Trip Analytics on GCP | Anirudh Kowshik</title>
+  <meta name="description" content="End-to-end batch pipeline on Google Cloud: Mage ETL, a pandas star schema, BigQuery and Looker Studio.">
+  <meta name="theme-color" content="#0b0c0f">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a class="brand" href="../">AK</a>
+      <nav aria-label="Primary">
+        <ul>
+          <li><a href="../#about">About</a></li>
+          <li><a href="../#projects">Projects</a></li>
+          <li><a href="../#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="project wrap">
+    <a class="back" href="../#projects">&larr; All projects</a>
+    <p class="eyebrow">Project &middot; Data engineering &middot; GCP</p>
+    <h1>Trip Analytics on GCP</h1>
+    <p class="lede">An end-to-end batch pipeline that turns raw taxi trip records into a star schema in BigQuery and an analytics dashboard in Looker Studio, orchestrated with Mage running on a Compute Engine VM.</p>
+    <ul class="tags"><li>Python</li><li>pandas</li><li>Mage</li><li>Compute Engine</li><li>BigQuery</li><li>SQL</li><li>Looker Studio</li></ul>
+    <div class="cta">
+      <a class="btn btn-primary" href="https://github.com/kowshik-anirudh/Data-Engineering-Projects/tree/main/Lyft-Analytics-DE-GCP/Lyft-Analytics-Data-Engineering-GCP-Mage-ETL-main" target="_blank" rel="noopener">Source code</a>
+    </div>
+
+    <h2><span>01</span>Architecture</h2>
+    <ol class="flow">
+      <li><strong>Extract</strong>Mage loads the raw trip CSV (pickup/drop-off times and locations, distances, fares, payment types).</li>
+      <li><strong>Transform</strong>pandas builds a star schema: one fact table and eight dimensions.</li>
+      <li><strong>Load</strong>Each table is written to BigQuery, with project and dataset set by configuration.</li>
+      <li><strong>Analyze</strong>A SQL join produces one analytics table that feeds a Looker Studio dashboard.</li>
+    </ol>
+
+    <h2><span>02</span>Data model</h2>
+    <p>The transform step models NYC TLC trip records as a star schema so the dashboard can slice by time, location, rate and payment type without scanning raw rows.</p>
+    <ul class="points">
+      <li><strong>fact_table:</strong> one row per trip, with every fare component (fare, extra, MTA tax, tip, tolls, surcharge, total) and keys to each dimension.</li>
+      <li><strong>datetime_dim:</strong> pickup and drop-off timestamps broken into hour, day, month, year and weekday.</li>
+      <li><strong>rate_code_dim and payment_type_dim:</strong> numeric codes mapped to readable names.</li>
+      <li><strong>pickup_location_dim and dropoff_location_dim</strong>, plus <strong>passenger_count_dim</strong> and <strong>trip_distance_dim</strong>.</li>
+    </ul>
+
+    <h2><span>03</span>Engineering notes</h2>
+    <ul class="points">
+      <li>Mage runs on a Compute Engine VM, so the ETL runs in the cloud rather than on a laptop.</li>
+      <li>The BigQuery target project and dataset come from environment variables, so the same pipeline can deploy to any GCP project.</li>
+      <li>The loader writes each table with replace semantics, so re-running the pipeline is safe.</li>
+    </ul>
+
+    <p class="note">Started as a guided learning project. Sources are credited in the repository.</p>
+    <div class="project-nav">
+      <a href="../#projects">&larr; Back to all projects</a>
+      <a href="youtube-analytics-aws.html">Next: YouTube analytics on AWS &rarr;</a>
+    </div>
+  </main>
+</body>
+</html>

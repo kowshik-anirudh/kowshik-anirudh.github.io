@@ -159,7 +159,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 /* ---------- Cards ---------- */
 .grid { display: grid; gap: 1rem; }
 .cards { grid-template-columns: 1fr; }
-@media (min-width: 720px) { .cards { grid-template-columns: 1.6fr 1fr; } }
+@media (min-width: 720px) { .cards { grid-template-columns: 1fr; } }
 .card {
   background: var(--bg-elev); border: 1px solid var(--line); border-radius: var(--radius);
   padding: 1.5rem; display: flex; flex-direction: column;
@@ -259,3 +259,15 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .project-nav a { color: var(--accent); text-decoration: none; font-size: .9rem; }
 .project-nav a:hover { text-decoration: underline; }
 .project > * { animation: rise .8s var(--ease) both; }
+
+.project .note { margin-top: 3rem; font-size: .85rem; color: var(--faint); }
+
+/* Data engineering project cards */
+.cards-3 { display: grid; gap: 1rem; grid-template-columns: 1fr; }
+@media (min-width: 720px) { .cards-3 { grid-template-columns: repeat(3, 1fr); } }
+.card-link { text-decoration: none; color: inherit; display: flex; flex-direction: column; }
+.card-link:hover { color: inherit; }
+.card-kicker { font-family: var(--mono); font-size: .75rem; letter-spacing: .08em; color: var(--accent); margin-bottom: .4rem; }
+.card-more { margin-top: auto; padding-top: .75rem; font-size: .9rem; color: var(--accent); }
+.card-link:hover .card-more { text-decoration: underline; }
+.more-gh { margin-top: 1.5rem; font-size: .9rem; color: var(--faint); }

@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>YouTube Trending Analytics on AWS | Anirudh Kowshik</title>
+  <meta name="description" content="Serverless data lake on AWS: S3, event-driven Lambda, Glue crawlers and ETL, Athena and QuickSight.">
+  <meta name="theme-color" content="#0b0c0f">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a class="brand" href="../">AK</a>
+      <nav aria-label="Primary">
+        <ul>
+          <li><a href="../#about">About</a></li>
+          <li><a href="../#projects">Projects</a></li>
+          <li><a href="../#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="project wrap">
+    <a class="back" href="../#projects">&larr; All projects</a>
+    <p class="eyebrow">Project &middot; Data engineering &middot; AWS</p>
+    <h1>YouTube Trending Analytics on AWS</h1>
+    <p class="lede">A serverless data lake for trending YouTube videos across seven regions. Raw CSV and JSON land in S3, an event-driven Lambda cleans them into Parquet, Glue catalogs and joins them, and Athena and QuickSight serve the analysis.</p>
+    <ul class="tags"><li>AWS S3</li><li>Lambda</li><li>Glue</li><li>Athena</li><li>QuickSight</li><li>IAM</li><li>Python</li><li>PySpark</li><li>Parquet</li></ul>
+    <div class="cta">
+      <a class="btn btn-primary" href="https://github.com/kowshik-anirudh/Data-Engineering-Projects/tree/main/Youtube-video-data-analytics-using-AWS-main" target="_blank" rel="noopener">Source code</a>
+    </div>
+
+    <h2><span>01</span>Architecture</h2>
+    <ol class="flow">
+      <li><strong>Ingest</strong>Raw statistics CSVs and category JSON files are uploaded to S3, partitioned by region.</li>
+      <li><strong>Clean</strong>An S3 event triggers a Lambda that flattens the nested JSON and writes Parquet to a cleansed zone.</li>
+      <li><strong>Catalog and transform</strong>Glue crawlers register schemas, and a Glue ETL job joins statistics to categories.</li>
+      <li><strong>Analyze</strong>Partitioned Parquet is queried with Athena and visualized in QuickSight.</li>
+    </ol>
+
+    <h2><span>02</span>How it works</h2>
+    <ul class="points">
+      <li><strong>Event-driven cleaning:</strong> new JSON files in the raw bucket trigger a Lambda that flattens the nested <code>items</code> array with pandas and writes Parquet through AWS Data Wrangler, updating the Glue Data Catalog as it goes.</li>
+      <li><strong>Glue ETL:</strong> PySpark jobs convert the regional CSVs to Parquet partitioned by <code>region</code>, then join video statistics to category names on <code>category_id</code> into an analytics table.</li>
+      <li><strong>Columnar storage:</strong> Parquet plus partitioning keeps Athena scans small and fast compared with querying raw CSV and JSON.</li>
+      <li><strong>Access control:</strong> IAM roles scope what Lambda and Glue can read and write.</li>
+    </ul>
+
+    <p class="note">Started as a guided learning project. Sources are credited in the repository.</p>
+    <div class="project-nav">
+      <a href="../#projects">&larr; Back to all projects</a>
+      <a href="tokyo-olympics-azure.html">Next: Tokyo Olympics on Azure &rarr;</a>
+    </div>
+  </main>
+</body>
+</html>
