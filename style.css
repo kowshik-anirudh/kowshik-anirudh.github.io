@@ -70,11 +70,31 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .hero h1 { font-size: clamp(2.5rem, 8vw, 4.25rem); font-weight: 700; letter-spacing: -0.03em; }
 .hero .title { font-size: clamp(1.1rem, 2.6vw, 1.35rem); color: var(--text); margin: .75rem 0 1.25rem; font-weight: 500; }
 .hero .pitch { color: var(--muted); max-width: 38rem; font-size: 1.05rem; }
-.hero > * { animation: rise .9s var(--ease) both; }
-.hero > *:nth-child(2) { animation-delay: .06s; }
-.hero > *:nth-child(3) { animation-delay: .12s; }
-.hero > *:nth-child(4) { animation-delay: .18s; }
-.hero > *:nth-child(5) { animation-delay: .24s; }
+.hero-text > * { animation: rise .9s var(--ease) both; }
+.hero-text > *:nth-child(2) { animation-delay: .06s; }
+.hero-text > *:nth-child(3) { animation-delay: .12s; }
+.hero-text > *:nth-child(4) { animation-delay: .18s; }
+.hero-text > *:nth-child(5) { animation-delay: .24s; }
+
+/* Portrait: text left / photo right on wide screens, photo on top on phones */
+.hero { display: grid; gap: 2.5rem; align-items: center; }
+@media (min-width: 760px) { .hero { grid-template-columns: 1fr 260px; gap: 3.5rem; } }
+.hero-photo {
+  position: relative; margin: 0; width: 100%; max-width: 260px; aspect-ratio: 4 / 5;
+  border-radius: 22px; overflow: hidden;
+  background: radial-gradient(120% 90% at 30% 15%, #1e2a2a 0%, var(--bg-elev) 55%, var(--bg) 100%);
+  border: 1px solid var(--line);
+  box-shadow: 0 0 0 1px rgba(124,196,184,.08), 0 30px 80px -30px rgba(124,196,184,.35);
+  animation: rise 1s var(--ease) .15s both;
+  transition: transform .5s var(--ease), box-shadow .5s var(--ease);
+}
+.hero-photo:hover { transform: translateY(-4px); box-shadow: 0 0 0 1px rgba(124,196,184,.25), 0 40px 90px -30px rgba(124,196,184,.5); }
+.hero-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; filter: saturate(.9) contrast(1.03); }
+.hero-photo::after { content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background: linear-gradient(180deg, transparent 60%, rgba(11,12,15,.45) 100%); }
+.hero-photo-fallback { position: absolute; inset: 0; display: grid; place-items: center;
+  font-family: var(--mono); font-size: 3rem; letter-spacing: .1em; color: var(--accent); opacity: .7; }
+@media (max-width: 759px) { .hero-photo { order: -1; max-width: 160px; border-radius: 18px; } }
 @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 
 .cta { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2rem; }
