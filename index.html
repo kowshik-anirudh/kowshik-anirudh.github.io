@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Anirudh Kowshik | Systems Validation Engineer, AI Infrastructure</title>
+  <meta name="description" content="Anirudh Kowshik is a Systems Validation Engineer at Quanta Manufacturing, validating NVIDIA GB300 / VR200 and OCP AI server racks through NPI.">
+  <meta name="theme-color" content="#0b0c0f">
+  <meta property="og:title" content="Anirudh Kowshik | Systems Validation Engineer">
+  <meta property="og:description" content="Validating AI server racks, from bring-up to production.">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a class="brand" href="#top">AK</a>
+      <nav aria-label="Primary">
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#experience">Experience</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#reading">Reading</a></li>
+          <li><a href="#beyond">Beyond work</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- Hero -->
+    <section class="hero wrap" id="top">
+      <p class="eyebrow">AI infrastructure &middot; Fremont, CA</p>
+      <h1>Anirudh Kowshik</h1>
+      <p class="title">Systems Validation Engineer at Quanta Manufacturing</p>
+      <p class="pitch">I validate AI server racks, including NVIDIA GB300 and VR200 platforms and OCP servers for Meta's AI infrastructure, from first bring-up to mass production.</p>
+      <div class="cta">
+        <a class="btn btn-primary" href="https://www.linkedin.com/in/anirudh-kowshik262026" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="btn" href="https://github.com/kowshik-anirudh" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section class="section wrap reveal" id="about">
+      <h2 class="section-title"><span>01</span>About me</h2>
+      <div class="prose">
+        <p>I'm a Systems Validation Engineer at Quanta Manufacturing in Fremont, working in AI infrastructure. I take AI server racks through NPI before mass production: NVIDIA GB300 and VR200 rack platforms, and OCP server platforms for Meta's AI infrastructure.</p>
+        <p>My work covers ASIC-based rack validation, RDMA/RoCE networking, PRBS/SerDes signal integrity, BMC firmware (Redfish, IPMI), and BIOS, CPLD, PCIe and NVMe debug, through to L10&ndash;L12 rack bring-up. I automate as much of it as I can with Python and Bash.</p>
+        <p>Before hardware, I worked across the software stack: production RAG and ML as a data scientist, streaming pipelines as a data engineer, and Kubernetes platforms as a software engineer. That background helps when a rack problem turns out to be a software problem, or the other way around.</p>
+      </div>
+      <ul class="skills" aria-label="Core areas">
+        <li>Rack-scale validation</li><li>RDMA / RoCE</li><li>PRBS / SerDes</li><li>Redfish &middot; IPMI</li><li>BIOS &middot; CPLD &middot; PCIe &middot; NVMe</li><li>L10&ndash;L12 bring-up</li><li>Python &middot; Bash automation</li>
+      </ul>
+    </section>
+
+    <!-- Experience -->
+    <section class="section wrap reveal" id="experience">
+      <h2 class="section-title"><span>02</span>Experience</h2>
+      <ol class="timeline">
+        <li>
+          <div class="tl-head"><h3>Systems Validation Engineer</h3><span class="org">Quanta Manufacturing &middot; Fremont, CA</span></div>
+          <p>NPI validation of AI server racks: NVIDIA GB300 and VR200 platforms and OCP servers for Meta's AI infrastructure. RDMA/RoCE, SerDes signal integrity, BMC firmware, low-level platform debug, L10&ndash;L12 bring-up, and test automation.</p>
+        </li>
+        <li>
+          <div class="tl-head"><h3>Data Scientist</h3><span class="org">ResMed</span></div>
+          <p>Built a production RAG assistant on AWS Bedrock and OpenSearch; guardrails cut hallucinations by 40%. PyTorch modeling and forecasting.</p>
+        </li>
+        <li>
+          <div class="tl-head"><h3>Data Engineer</h3><span class="org">DLL</span></div>
+          <p>Streaming data pipelines from Kafka into Azure.</p>
+        </li>
+        <li>
+          <div class="tl-head"><h3>Software Engineer</h3><span class="org">Unisys</span></div>
+          <p>Ran production AKS and OpenShift clusters with Terraform, Ansible and Helm, plus observability.</p>
+        </li>
+      </ol>
+
+      <h3 class="sub">Education</h3>
+      <ul class="edu">
+        <li><strong>PhD, Information Technology</strong> (Computer Engineering concentration, executive program, in progress 2026&ndash;2030), University of the Cumberlands</li>
+        <li><strong>MS, Data Analytics</strong>, Penn State (Chancellor's Scholar)</li>
+        <li><strong>BE, Computer Science</strong>, NIE Mysore</li>
+      </ul>
+    </section>
+
+    <!-- Projects -->
+    <section class="section wrap reveal" id="projects">
+      <h2 class="section-title"><span>03</span>Projects</h2>
+      <div class="grid cards">
+        <article class="card">
+          <h3>MarketPulse (ai-stock-storyteller)</h3>
+          <p>Serverless app that pulls live stock data, computes technical indicators (RSI, ATR, moving averages), and generates plain-language summaries with an LLM. It's a FastAPI backend on AWS Lambda behind API Gateway, deployed with SAM, with S3 caching and a static frontend with Plotly charts.</p>
+          <ul class="tags"><li>Python</li><li>FastAPI</li><li>AWS Lambda</li><li>API Gateway</li><li>S3</li><li>OpenAI API</li><li>Plotly</li></ul>
+          <div class="card-links">
+            <a href="https://github.com/kowshik-anirudh/ai-stock-storyteller" target="_blank" rel="noopener">Repo &rarr;</a>
+            <a href="https://kowshik-anirudh.github.io/ai-stock-storyteller/" target="_blank" rel="noopener">Live demo &rarr;</a>
+          </div>
+        </article>
+        <article class="card card-muted">
+          <h3>More on GitHub</h3>
+          <p>Most of my validation and automation work is internal. Public experiments and new projects go on my GitHub profile.</p>
+          <div class="card-links">
+            <a href="https://github.com/kowshik-anirudh" target="_blank" rel="noopener">github.com/kowshik-anirudh &rarr;</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Reading -->
+    <section class="section wrap reveal" id="reading">
+      <h2 class="section-title"><span>04</span>Reading</h2>
+      <p class="lede">Recent AI infrastructure writing I think is worth your time.</p>
+      <ul class="reading">
+        <li>
+          <a href="https://engineering.fb.com/2026/08/24/networking-traffic/metaroce-rdma-transport-ai-ethernet/" target="_blank" rel="noopener">MetaRoCE: A New RDMA Transport Built for AI-Scale Ethernet</a>
+          <span class="meta">Engineering at Meta &middot; Aug 24, 2026</span>
+          <p>Meta rethinks RoCE for million-GPU fabrics, with multipath, out-of-order delivery and loss tolerance at the endpoint, released through OCP.</p>
+        </li>
+        <li>
+          <a href="https://arxiv.org/abs/2608.00358" target="_blank" rel="noopener">HCCL: Collective Communication for Meta Training and Inference Accelerators</a>
+          <span class="meta">arXiv (Meta) &middot; Aug 1, 2026</span>
+          <p>How Meta offloads collectives to dedicated message engines on MTIA. A useful contrast to the NCCL-on-GPU approach.</p>
+        </li>
+        <li>
+          <a href="https://developer.nvidia.com/blog/setting-a-world-record-for-moe-pre-training-on-nvidia-gb300-nvl72/" target="_blank" rel="noopener">Setting a World Record for MoE Pre-Training on NVIDIA GB300 NVL72</a>
+          <span class="meta">NVIDIA Technical Blog &middot; Jul 21, 2026</span>
+          <p>DeepSeek-V3 671B pre-training on GB300 NVL72, and how software alone delivered 1.5x more performance on the same racks in six months.</p>
+        </li>
+        <li>
+          <a href="https://www.databricks.com/blog/how-we-keep-gpus-reliable-across-databricks-ai" target="_blank" rel="noopener">How we keep GPUs reliable across Databricks AI</a>
+          <span class="meta">Databricks Blog &middot; Jul 1, 2026</span>
+          <p>A practical taxonomy of GPU failures (crashes, silent slowdowns, numerical corruption) and the health checks that catch each one.</p>
+        </li>
+        <li>
+          <a href="https://arxiv.org/abs/2605.09370" target="_blank" rel="noopener">From Detection to Recovery: Operational Analysis on LLM Pre-training with 504 GPUs</a>
+          <span class="meta">arXiv &middot; May 10, 2026 (rev. Jun 15, 2026)</span>
+          <p>Production data from 224 training sessions on what actually fails, how it's detected, and why auto-retry beats manual recovery.</p>
+        </li>
+        <li>
+          <a href="https://developer.nvidia.com/blog/nvidia-vera-rubin-pod-seven-chips-five-rack-scale-systems-one-ai-supercomputer/" target="_blank" rel="noopener">NVIDIA Vera Rubin POD: Seven Chips, Five Rack-Scale Systems, One AI Supercomputer</a>
+          <span class="meta">NVIDIA Technical Blog &middot; Mar 16, 2026</span>
+          <p>The rack-level design behind Vera Rubin: third-gen MGX, cable-free trays, 45&deg;C liquid cooling and power smoothing.</p>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Beyond work -->
+    <section class="section wrap reveal" id="beyond">
+      <h2 class="section-title"><span>05</span>Beyond work</h2>
+      <p class="lede">Away from the lab, you'll usually find me doing one of these.</p>
+      <div class="grid photos">
+        <figure class="photo" data-label="Hiking">
+          <img src="images/hiking.jpg" alt="Hiking" loading="lazy" decoding="async" width="800" height="1000" onerror="this.remove()">
+          <figcaption>Hiking: trails around the Bay Area and beyond.</figcaption>
+        </figure>
+        <figure class="photo" data-label="Techno">
+          <img src="images/techno.jpg" alt="Techno music" loading="lazy" decoding="async" width="800" height="1000" onerror="this.remove()">
+          <figcaption>Techno: long sets and good sound systems.</figcaption>
+        </figure>
+        <figure class="photo" data-label="Travel">
+          <img src="images/travel.jpg" alt="Travel" loading="lazy" decoding="async" width="800" height="1000" onerror="this.remove()">
+          <figcaption>Travel: new cities, slow mornings.</figcaption>
+        </figure>
+        <figure class="photo" data-label="Food">
+          <img src="images/food.jpg" alt="Food" loading="lazy" decoding="async" width="800" height="1000" onerror="this.remove()">
+          <figcaption>Food: always looking for the next great meal.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="section wrap reveal contact" id="contact">
+      <h2 class="section-title"><span>06</span>Contact</h2>
+      <p class="lede">Open to conversations about AI infrastructure, rack-scale validation and cluster reliability. LinkedIn is the best way to reach me.</p>
+      <div class="cta">
+        <a class="btn btn-primary" href="https://www.linkedin.com/in/anirudh-kowshik262026" target="_blank" rel="noopener">Message on LinkedIn</a>
+        <a class="btn" href="https://github.com/kowshik-anirudh" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="wrap footer">
+    <p>&copy; <span id="year">2026</span> Anirudh Kowshik</p>
+  </footer>
+</body>
+</html>
