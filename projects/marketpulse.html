@@ -5,19 +5,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>MarketPulse | Anirudh Kowshik</title>
   <meta name="description" content="MarketPulse: a serverless app that turns live stock data and technical indicators into plain-language AI summaries. Python, FastAPI, AWS Lambda, S3, OpenAI.">
-  <meta name="theme-color" content="#0b0c0f">
+  <meta name="theme-color" content="#0c0d10">
+  <meta name="color-scheme" content="dark">
+  <link rel="canonical" href="https://kowshik-anirudh.github.io/projects/marketpulse.html">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://kowshik-anirudh.github.io/projects/marketpulse.html">
+  <meta property="og:title" content="MarketPulse | Anirudh Kowshik">
+  <meta property="og:description" content="MarketPulse: a serverless app that turns live stock data and technical indicators into plain-language AI summaries. Python, FastAPI, AWS Lambda, S3, OpenAI.">
+  <meta property="og:image" content="https://kowshik-anirudh.github.io/images/og.png">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../style.css">
+  <script defer src="../script.js"></script>
 </head>
 <body>
+  <a class="skip" href="#main">Skip to content</a>
+
   <header class="nav">
     <div class="wrap nav-inner">
-      <a class="brand" href="../">AK</a>
+      <a class="brand" href="../" aria-label="Anirudh Kowshik, home"><span class="led" aria-hidden="true"></span>AK</a>
       <nav aria-label="Primary">
         <ul>
           <li><a href="../#about">About</a></li>
+          <li><a href="../#experience">Experience</a></li>
           <li><a href="../#projects">Projects</a></li>
           <li><a href="../#contact">Contact</a></li>
         </ul>
@@ -25,9 +38,9 @@
     </div>
   </header>
 
-  <main class="project wrap">
-    <a class="back" href="../#projects">&larr; All projects</a>
-    <p class="eyebrow">Project &middot; Serverless &middot; LLM</p>
+  <main class="project wrap" id="main">
+    <a class="back" href="../#projects"><span aria-hidden="true">&larr;</span> All projects</a>
+    <p class="kicker">Project &middot; Serverless &middot; LLM</p>
     <h1>MarketPulse</h1>
     <p class="lede">A serverless app that turns live market data into a short, evidence-based trader's brief. It computes technical indicators from raw price data, then has an LLM explain them in plain language with no invented numbers.</p>
     <ul class="tags"><li>Python</li><li>FastAPI</li><li>AWS Lambda</li><li>API Gateway</li><li>S3</li><li>AWS SAM</li><li>OpenAI API</li><li>pandas</li><li>Plotly</li></ul>
@@ -70,5 +83,11 @@
       <a href="https://github.com/kowshik-anirudh/ai-stock-storyteller" target="_blank" rel="noopener">View the code on GitHub &rarr;</a>
     </div>
   </main>
+  <footer class="footer wrap">
+    <div class="footer-inner">
+      <p>&copy; <span id="year">2026</span> Anirudh Kowshik</p>
+      <p><a href="https://www.linkedin.com/in/anirudh-kowshik262026" target="_blank" rel="noopener">LinkedIn</a> &middot; <a href="https://github.com/kowshik-anirudh" target="_blank" rel="noopener">GitHub</a></p>
+    </div>
+  </footer>
 </body>
 </html>

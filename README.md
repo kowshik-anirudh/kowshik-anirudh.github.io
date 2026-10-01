@@ -4,28 +4,29 @@ A static, single-page site with plain HTML, CSS and a small JS file. It has no f
 
 ```
 website/
-  index.html   page content
-  style.css    dark theme, layout, motion
-  script.js    scroll reveal + nav highlight (optional; page works without it)
-  images/      photos for the "Beyond work" section
-  .nojekyll    tells GitHub Pages to serve files as-is
+  index.html        home page (hero, about, experience, projects, reading, off the clock, contact)
+  projects/*.html   project case studies (share style.css)
+  404.html          custom "link down" page (uses root-absolute paths, so GitHub Pages can serve it at any depth)
+  style.css         dark theme, layout, motion (respects prefers-reduced-motion)
+  script.js         scroll reveal + nav highlight (optional; the page works without it)
+  favicon.svg       eye-diagram favicon
+  images/           photos, project screenshots, og.png (social preview), apple-touch-icon.png
+  .nojekyll         tells GitHub Pages to serve files as-is
 ```
 
-## Adding photos
+## Design notes
 
-The "Beyond work" tiles show a dark gradient placeholder until these files exist:
+- The hero background is an inline SVG **eye diagram** (overlaid simulated SerDes bit traces). It draws in once on load and is static under reduced motion.
+- The About section's "stack" panel is styled as a 6U rack: lit units are where he works today.
+- `images/og.png` (1200x630) is the link-preview image. Meta tags point at `https://kowshik-anirudh.github.io/images/og.png`; if the site moves to another URL, update `og:image`, `og:url` and `canonical` in each page.
 
-| File                 | Section |
-|----------------------|---------|
-| `images/hiking.jpg`  | Hiking  |
-| `images/techno.jpg`  | Techno  |
-| `images/travel.jpg`  | Travel  |
-| `images/food.jpg`    | Food    |
+## Photos
 
-- Use a **4:5 portrait** crop (for example 800x1000 px). Other ratios still work but get center-cropped.
-- **Compress each photo to under ~300 KB.** Use [Squoosh](https://squoosh.app) (MozJPEG, quality ~70), or `magick in.jpg -resize 800x1000^ -gravity center -extent 800x1000 -quality 72 -strip images/hiking.jpg`.
-- Remove location metadata (EXIF/GPS). The `-strip` flag above does this.
-- Edit the captions in `index.html` (`<figcaption>`) to make them your own.
+Photos live in `images/` (`profile.jpg`, `education.jpg`, `hiking.jpg`, `techno.jpg`, `travel.jpg`, `food.jpg`). To replace one, keep the filename.
+
+- **Compress each photo to under ~300 KB** (Squoosh, MozJPEG quality ~70, or `magick in.jpg -resize 800x1000^ -gravity center -extent 800x1000 -quality 72 -strip out.jpg`).
+- Strip location metadata (EXIF/GPS); `-strip` does this.
+- Captions are the `<figcaption>` elements in `index.html`.
 
 ## Preview locally
 
