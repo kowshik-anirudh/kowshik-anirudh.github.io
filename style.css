@@ -142,6 +142,20 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .edu li { color: var(--muted); font-size: .95rem; padding: .35rem 0; }
 .edu strong { color: var(--text); font-weight: 500; }
 
+/* Education photo: beside the list on wide screens, below it on phones */
+.edu-wrap { display: grid; gap: 1.5rem; align-items: center; }
+@media (min-width: 760px) { .edu-wrap { grid-template-columns: 1fr 300px; gap: 2.5rem; } }
+.edu-photo {
+  position: relative; margin: 0; aspect-ratio: 4 / 3; border-radius: var(--radius); overflow: hidden;
+  background: radial-gradient(120% 90% at 30% 15%, #1e2a2a 0%, var(--bg-elev) 60%, var(--bg) 100%);
+  border: 1px solid var(--line);
+  transition: transform .5s var(--ease), border-color .5s var(--ease);
+}
+.edu-photo:hover { transform: translateY(-3px); border-color: rgba(124,196,184,.35); }
+.edu-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; filter: saturate(.9) contrast(1.03); }
+.edu-photo-fallback { position: absolute; inset: 0; display: grid; place-items: center;
+  font-family: var(--mono); font-size: .85rem; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); }
+
 /* ---------- Cards ---------- */
 .grid { display: grid; gap: 1rem; }
 .cards { grid-template-columns: 1fr; }
