@@ -1,12 +1,11 @@
 // Progressive enhancement only: the page is complete and readable without JS.
 // Motion rules: animate transform/opacity only, drive scroll work with
 // IntersectionObserver + requestAnimationFrame, read layout before writing,
-// skip everything for prefers-reduced-motion, and keep phones light.
+// never hide something that is already on screen, and honour
+// prefers-reduced-motion (static final state, no loops).
 (function () {
   var root = document.documentElement;
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches && window.innerWidth >= 880;
-  var small = window.innerWidth < 720;
   var hasIO = 'IntersectionObserver' in window;
   var clamp = function (v, a, b) { return v < a ? a : v > b ? b : v; };
 
@@ -43,8 +42,9 @@
   if (hasIO && Object.keys(links).length) {
     var spy = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
-        if (e.isIntersecting && links[e.target.id]) {
-          Object.keys(links).forEach(function (k) { links[k].classList.remove('active'); links[k].removeAttribute('aria-current'); });
+        if (!e.isIntersecting) return;
+        Object.keys(links).forEach(function (k) { links[k].classList.remove('active'); links[k].removeAttribute('aria-current'); });
+        if (links[e.target.id]) {
           links[e.target.id].classList.add('active');
           links[e.target.id].setAttribute('aria-current', 'true');
         }
@@ -56,120 +56,179 @@
   var y = document.getElementById('year');
   if (y) y.textContent = new Date().getFullYear();
 
+  // ---------- Hero scope: a simulated PRBS7 eye diagram on a canvas ----------
+  // Without JS the static SVG behind the canvas shows. With JS, the canvas
+  // draws one full static frame first; the sweep only runs while the scope is
+  // on screen, the tab is visible and reduced motion is off.
+  (function scope() {
+    var fig = document.querySelector('.scope');
+    var canvas = fig && fig.querySelector('.scope-canvas');
+    if (!canvas || !canvas.getContext) return;
+    var ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    var meas = fig.querySelector('.scope-meas');
+    var ehEl = fig.querySelector('[data-eh]');
+    var ewEl = fig.querySelector('[data-ew]');
+    var hint = fig.querySelector('.hint');
+
+    var W = 0, H = 0, dpr = 1;
+    var NOISE = [0.035, 0.11];   // amplitude noise (fraction of swing), calm -> jittery
+    var JIT = [0.03, 0.13];      // timing jitter (fraction of a unit interval)
+    var heat = 0, heatTarget = 0;
+
+    // PRBS7 (x^7 + x^6 + 1)
+    var lfsr = 0x5a;
+    var nextBit = function () { var b = ((lfsr >> 6) ^ (lfsr >> 5)) & 1; lfsr = ((lfsr << 1) | b) & 0x7f; return b; };
+    var gauss = function () { return (Math.random() + Math.random() + Math.random() + Math.random() - 2) * 1.732; };
+    var bits = [nextBit(), nextBit()];
+
+    // Rolling window of measurements taken from the traces actually drawn
+    var WIN = 240, hi = [], lo = [], cross = [];
+    var push = function (arr, v) { arr.push(v); if (arr.length > WIN) arr.shift(); };
+
+    // One trace = three bit periods across the 2-UI screen; crossings sit at 1/4 and 3/4.
+    var makeTrace = function () {
+      bits.push(nextBit());
+      if (bits.length > 3) bits.shift();
+      var noise = NOISE[0] + (NOISE[1] - NOISE[0]) * heat;
+      var jit = JIT[0] + (JIT[1] - JIT[0]) * heat;
+      var lv = bits.map(function (b) { return (b ? 1 : -1) * (1 + gauss() * noise); });
+      var t1 = 0.5 + gauss() * jit, t2 = 1.5 + gauss() * jit;
+      push(bits[1] ? hi : lo, lv[1]);
+      if (bits[0] !== bits[1]) push(cross, t1 - 0.5);
+      if (bits[1] !== bits[2]) push(cross, t2 - 1.5);
+      return { lv: lv, t1: t1, t2: t2 };
+    };
+    var edge = function (u) { return u <= 0 ? 0 : u >= 1 ? 1 : (1 - Math.cos(Math.PI * u)) / 2; };
+    var TR = 0.5; // rise time in UI
+    var volt = function (tr, t) {
+      var v = tr.lv[0];
+      v += (tr.lv[1] - tr.lv[0]) * edge((t - tr.t1) / TR + 0.5);
+      v += (tr.lv[2] - tr.lv[1]) * edge((t - tr.t2) / TR + 0.5);
+      return v;
+    };
+    var X = function (t) { return (t / 2) * W; };
+    var Y = function (v) { return H / 2 - v * H * 0.32; };
+
+    var stroke = function (tr, t0, t1, alpha) {
+      ctx.beginPath();
+      var steps = Math.max(2, Math.ceil((t1 - t0) * 40));
+      for (var i = 0; i <= steps; i++) {
+        var t = t0 + (t1 - t0) * i / steps;
+        var px = X(t), py = Y(volt(tr, t));
+        if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+      }
+      ctx.strokeStyle = 'rgba(124,196,184,' + alpha + ')';
+      ctx.stroke();
+    };
+
+    var readout = function () {
+      if (!meas || !hi.length || !lo.length) return;
+      var minHi = Math.min.apply(null, hi), maxLo = Math.max.apply(null, lo);
+      var eh = clamp((minHi - maxLo) / 2, 0, 1);
+      var ew = 1;
+      if (cross.length > 1) ew = clamp(1 - (Math.max.apply(null, cross) - Math.min.apply(null, cross)), 0, 1);
+      ehEl.textContent = Math.round(eh * 100) + '%';
+      ewEl.textContent = ew.toFixed(2) + ' UI';
+      meas.hidden = false;
+    };
+
+    var size = function () {
+      var r = canvas.getBoundingClientRect();
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      W = Math.max(1, Math.round(r.width * dpr));
+      H = Math.max(1, Math.round(r.height * dpr));
+      if (canvas.width !== W) canvas.width = W;
+      if (canvas.height !== H) canvas.height = H;
+      ctx.lineWidth = 1.1 * dpr;
+      ctx.lineJoin = 'round';
+    };
+
+    // A full persistence frame: used on load, on resize, and as the reduced-motion view.
+    var drawStatic = function () {
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.clearRect(0, 0, W, H);
+      ctx.globalCompositeOperation = 'lighter';
+      for (var i = 0; i < 200; i++) stroke(makeTrace(), 0, 2, 0.14);
+      readout();
+    };
+
+    size();
+    drawStatic();
+    fig.classList.add('live');
+
+    var running = false, visible = true, beam = 0, active = [], lastRead = 0, raf = 0;
+    var BATCH = 28, SWEEP_MS = 1000, last = 0;
+    var frame = function (now) {
+      if (!running) return;
+      var dt = last ? Math.min(now - last, 64) : 16;
+      last = now;
+      heat += (heatTarget - heat) * 0.06;
+      // persistence: fade what is already on screen
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.fillStyle = 'rgba(0,0,0,' + (0.012 * dt / 16).toFixed(4) + ')';
+      ctx.fillRect(0, 0, W, H);
+      ctx.globalCompositeOperation = 'lighter';
+      if (!active.length) { active = []; for (var i = 0; i < BATCH; i++) active.push(makeTrace()); }
+      var from = beam;
+      beam = Math.min(2, beam + 2 * dt / SWEEP_MS);
+      for (var j = 0; j < active.length; j++) stroke(active[j], Math.max(0, from - 0.02), beam, 0.22);
+      if (beam >= 2) { beam = 0; active = []; }
+      if (now - lastRead > 450) { readout(); lastRead = now; }
+      raf = requestAnimationFrame(frame);
+    };
+    var start = function () { if (running || reduce || !visible || document.hidden) return; running = true; last = 0; raf = requestAnimationFrame(frame); };
+    var stop = function () { running = false; cancelAnimationFrame(raf); };
+
+    var resized = function () { size(); if (!running) drawStatic(); };
+    if ('ResizeObserver' in window) new ResizeObserver(resized).observe(canvas);
+    else window.addEventListener('resize', resized, { passive: true });
+
+    if (reduce) { if (hint) hint.remove(); return; }
+
+    if (hasIO) {
+      new IntersectionObserver(function (entries) {
+        visible = entries[0].isIntersecting;
+        if (visible) start(); else stop();
+      }).observe(canvas);
+    }
+    document.addEventListener('visibilitychange', function () { if (document.hidden) stop(); else start(); });
+    start();
+
+    // Point at it (or tap it) to add jitter; the readout closes up to match.
+    var hover = window.matchMedia('(hover: hover)').matches;
+    var screen = fig.querySelector('.scope-screen');
+    screen.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') heatTarget = 1; });
+    screen.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') heatTarget = 0; });
+    screen.addEventListener('pointerup', function (e) { if (e.pointerType !== 'mouse') heatTarget = heatTarget ? 0 : 1; });
+    if (hint) {
+      hint.textContent = hover ? ' Point at it to add jitter.' : ' Tap it to add jitter, and tap again to clear it.';
+      hint.hidden = false;
+    }
+  })();
+
   if (reduce || !hasIO) return; // final state is the default state
 
-  window.__motion = true;
-  root.classList.add('motion');
-
-  // ---------- Count-up for impact numbers ----------
-  var countUp = function (el) {
-    var to = parseFloat(el.getAttribute('data-to'));
-    if (!isFinite(to)) return;
-    el.style.minWidth = String(to).length + 'ch';
-    var start = null, dur = 1300;
-    var step = function (t) {
-      if (start === null) start = t;
-      var k = clamp((t - start) / dur, 0, 1);
-      var eased = 1 - Math.pow(1 - k, 3);
-      el.textContent = Math.round(to * eased);
-      if (k < 1) requestAnimationFrame(step);
-    };
-    el.textContent = '0';
-    requestAnimationFrame(step);
-  };
-
-  // ---------- Staggered children ----------
-  var gap = small ? 14 : 22, cap = small ? 220 : 380;
-  document.querySelectorAll('.stagger').forEach(function (list) {
-    Array.prototype.forEach.call(list.children, function (c, i) { c.style.setProperty('--d', Math.min(i * gap, cap) + 'ms'); });
-  });
-
-  // ---------- One observer for everything that "arrives" ----------
-  var arrive = function (el) {
-    if (el.classList.contains('count')) countUp(el);
-    else if (el.classList.contains('stack')) el.classList.add('on');
-    else el.classList.add('in');
-  };
+  // ---------- Arrivals: sections and roles fade up as they scroll in ----------
+  // Anything already on screen is marked as arrived *before* .motion is added,
+  // so content that is visible never disappears.
+  var arrive = function (el) { el.classList.add(el.classList.contains('stack') ? 'on' : 'in'); };
   var io = new IntersectionObserver(function (entries) {
     entries.forEach(function (e) {
       if (e.isIntersecting) { arrive(e.target); io.unobserve(e.target); }
     });
   }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
-  var targets = document.querySelectorAll('.reveal, .role, .stagger, .stack, .count');
-  targets.forEach(function (el) { io.observe(el); });
-  // Anything already on screen (or reached via a #hash link) arrives right away,
-  // so no text waits on an animation.
-  requestAnimationFrame(function () {
-    var vh = window.innerHeight, hits = [];
-    targets.forEach(function (el) { var r = el.getBoundingClientRect(); if (r.top < vh && r.bottom > 0) hits.push(el); });
-    hits.forEach(function (el) { if (!el.classList.contains('count')) { arrive(el); io.unobserve(el); } });
+  var vh = window.innerHeight;
+  var targets = Array.prototype.slice.call(document.querySelectorAll('.reveal, .role, .stack'));
+  var rects = targets.map(function (el) { return el.getBoundingClientRect(); });
+  targets.forEach(function (el, i) {
+    if (rects[i].top < vh && rects[i].bottom > 0) arrive(el); else io.observe(el);
   });
+  root.classList.add('motion');
 
   // ---------- Pause looping animations while off screen ----------
-  var loopers = document.querySelectorAll('.hero, .stack');
   var pauser = new IntersectionObserver(function (entries) {
     entries.forEach(function (e) { e.target.classList.toggle('paused', !e.isIntersecting); });
   });
-  loopers.forEach(function (el) { pauser.observe(el); });
-
-  // ---------- Pointer effects: desktop with a fine pointer only ----------
-  if (!finePointer) return;
-  root.classList.add('pointer');
-
-  // Hero: the eye drifts toward the pointer, a soft light follows it
-  var hero = document.querySelector('.hero');
-  var eye = hero && hero.querySelector('.eye-svg');
-  if (hero && eye) {
-    var spot = document.createElement('div');
-    spot.className = 'hero-spot';
-    spot.setAttribute('aria-hidden', 'true');
-    hero.insertBefore(spot, hero.firstChild);
-    var heroRect = null, tx = 0, ty = 0, cx = 0, cy = 0, sx = 0, sy = 0, tsx = 0, tsy = 0, running = false;
-    var loop = function () {
-      cx += (tx - cx) * 0.08; cy += (ty - cy) * 0.08;
-      sx += (tsx - sx) * 0.18; sy += (tsy - sy) * 0.18;
-      eye.style.transform = 'translate3d(' + cx.toFixed(2) + 'px,' + cy.toFixed(2) + 'px,0)';
-      spot.style.transform = 'translate3d(' + sx.toFixed(1) + 'px,' + sy.toFixed(1) + 'px,0)';
-      if (Math.abs(tx - cx) > 0.05 || Math.abs(ty - cy) > 0.05 || Math.abs(tsx - sx) > 0.5 || Math.abs(tsy - sy) > 0.5) requestAnimationFrame(loop);
-      else running = false;
-    };
-    var kick = function () { if (!running) { running = true; requestAnimationFrame(loop); } };
-    hero.addEventListener('pointerenter', function () { heroRect = hero.getBoundingClientRect(); hero.classList.add('pointing'); });
-    hero.addEventListener('pointermove', function (e) {
-      if (!heroRect) heroRect = hero.getBoundingClientRect();
-      var px = (e.clientX - heroRect.left) / heroRect.width - 0.5;
-      var py = (e.clientY - heroRect.top) / heroRect.height - 0.5;
-      tx = px * -22; ty = py * -14;
-      tsx = e.clientX - heroRect.left; tsy = e.clientY - heroRect.top;
-      kick();
-    });
-    hero.addEventListener('pointerleave', function () { tx = 0; ty = 0; hero.classList.remove('pointing'); heroRect = null; kick(); });
-    window.addEventListener('scroll', function () { heroRect = null; }, { passive: true });
-  }
-
-  // Cards, portrait, photo tiles: gentle 3D tilt + spotlight
-  document.querySelectorAll('.tilt').forEach(function (el) {
-    var pending = null, max = el.classList.contains('feature') ? 2.5 : 5;
-    var apply = function () {
-      var p = pending; pending = null;
-      if (!p) return;
-      var r = el.getBoundingClientRect(); // one read per frame, then writes
-      var mx = p.cx - r.left, my = p.cy - r.top;
-      el.style.setProperty('--rx', ((my / r.height - 0.5) * -max).toFixed(2) + 'deg');
-      el.style.setProperty('--ry', ((mx / r.width - 0.5) * max).toFixed(2) + 'deg');
-      el.style.setProperty('--mx', mx.toFixed(0) + 'px');
-      el.style.setProperty('--my', my.toFixed(0) + 'px');
-    };
-    el.addEventListener('pointerenter', function () { el.classList.add('tilting'); });
-    el.addEventListener('pointermove', function (e) {
-      if (!pending) requestAnimationFrame(apply);
-      pending = { cx: e.clientX, cy: e.clientY };
-    });
-    el.addEventListener('pointerleave', function () {
-      pending = null;
-      el.classList.remove('tilting');
-      el.style.setProperty('--rx', '0deg');
-      el.style.setProperty('--ry', '0deg');
-    });
-  });
+  document.querySelectorAll('.hero, .stack').forEach(function (el) { pauser.observe(el); });
 })();

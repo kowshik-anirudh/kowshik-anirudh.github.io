@@ -7,7 +7,7 @@ website/
   index.html        home page (hero, about, experience, skills, projects, reading, off the clock, contact)
   projects/*.html   project case studies (share style.css)
   style.css         dark theme, layout, motion (respects prefers-reduced-motion)
-  script.js         scroll reveal + nav highlight (optional; the page works without it)
+  script.js         hero scope canvas, scroll reveal, nav highlight (optional; the page works without it)
   favicon.svg       eye-diagram favicon
   images/           photos, project screenshots, og.png (social preview), apple-touch-icon.png
   .nojekyll         tells GitHub Pages to serve files as-is
@@ -15,7 +15,9 @@ website/
 
 ## Design notes
 
-- The hero background is an inline SVG **eye diagram** (overlaid simulated SerDes bit traces). It draws in once on load and is static under reduced motion.
+- The hero has a small **oscilloscope**: a `<canvas>` that draws a simulated PRBS7 eye diagram with persistence (`script.js`). It only animates while it is on screen and the tab is visible, and shows a single static frame under `prefers-reduced-motion`. Pointing at it (or tapping it on touch screens) adds jitter, and the eye-height/width readout is measured from the traces actually drawn. Without JS, a static SVG eye (`images/eye-fallback.svg`) shows instead, so the box is never empty.
+- Fonts: Bricolage Grotesque (display headings) with IBM Plex Sans and IBM Plex Mono (body and labels), from Google Fonts. Every page loads the same font URL.
+- Placeholders the owner still has to fill in are marked `[TODO Tn: ...]` in text (styled with a dashed amber outline by `.todo`) and `TODO-Tn` in attributes. Search for `TODO` to find them all.
 - The About section's "stack" panel is styled as a 6U rack: lit units are where he works today.
 - `images/og.png` (1200x630) is the link-preview image. Meta tags point at `https://kowshik-anirudh.github.io/images/og.png`; if the site moves to another URL, update `og:image`, `og:url` and `canonical` in each page.
 
