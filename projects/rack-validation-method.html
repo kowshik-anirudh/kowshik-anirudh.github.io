@@ -57,34 +57,34 @@
     <p class="line-hint" hidden>Select a station to see what it does, or run the whole line. Turn on <strong>Show a failure</strong> to watch what happens when a rack fails partway through.</p>
 
     <div class="line" data-line>
-      <section class="stage" id="st-pxe" data-short="PXE boot" data-log="dhcp: 18 compute blades requested an address|tftp: test image served to 18/18 blades|boot: 18/18 up, image version and checksum match|PASS  every blade booted the expected image">
+      <section class="stage" id="st-pxe" data-short="PXE boot" data-log="pxe: 18/18 blades found the provisioning server|os: test image downloaded to 18/18 blades|os: booted, version and checksum match|PASS  every blade running the expected image">
         <h3>PXE boot <small>Boot every blade from the network</small></h3>
         <p>Before any test runs, every compute blade boots over the network. It pulls the test operating system from a provisioning server, boots it, and checks in. Nothing is installed by hand, so every rack starts from the same known image.</p>
         <div class="stage-cols">
-          <div><h4>What it checks</h4><ul class="checks"><li>Every blade gets an address and finds the boot server</li><li>The right image and version download and boot</li><li>Every blade is reachable and reports in</li></ul></div>
+          <div><h4>What it checks</h4><ul class="checks"><li>Every blade network-boots and finds the provisioning server</li><li>The test OS image downloads</li><li>The OS boots, and its version and checksum are checked</li></ul></div>
           <div><h4>Pass means</h4><p>Every blade in the rack is running the expected image and answering.</p><h4>What it catches</h4><p>A wrong boot order, a dead network port, a blade that never shows up.</p></div>
         </div>
       </section>
 
-      <section class="stage" id="st-pretest" data-short="Pretest" data-log="inventory: cpu, gpu, memory, nvme match the bill of materials|fw: bios, bmc, cpld, nic and gpu flashed to the build set|pcie: every link trained at expected width and speed|buses + sensors: all devices answer, 0 readings out of range|PASS  component level clean on 18/18 blades">
+      <section class="stage" id="st-pretest" data-short="Pretest" data-log="firmware: bios, bmc, cpld, nic, gpu flashed to build set|cpu: every socket present, cores and clocks at spec|memory: every dimm present, size and speed correct|pcie: every link trained at expected width and speed|ssd: every drive present, health check clean|gpu/asic: all present, links up, firmware correct|buses: every device answered on its data bus|sensors: every sensor reading, 0 out of range|PASS  component level clean on 18/18 blades">
         <h3>Pretest <small>Check every part on every compute blade</small></h3>
         <p>Component-level testing on each compute blade. Firmware is flashed to the versions this build is meant to run, then every part is checked on its own: CPUs, memory, PCIe links, SSDs, GPUs and other ASICs, the data buses that connect them, and the sensors that watch them.</p>
         <div class="stage-cols">
-          <div><h4>What it checks</h4><ul class="checks"><li>Inventory matches the bill of materials</li><li>BIOS, BMC, CPLD, NIC and GPU firmware at target versions</li><li>Every PCIe link trains at its expected width and speed</li><li>Every device answers on its bus; every sensor reads and is in range</li></ul></div>
+          <div><h4>What it checks</h4><ul class="checks"><li>Firmware flashed to this build&rsquo;s versions: BIOS, BMC, CPLD, NIC, GPU</li><li>CPUs present and running at spec</li><li>Memory: every DIMM present at the right size and speed</li><li>PCIe: every link at its expected width and speed</li><li>SSDs present and healthy</li><li>GPUs and other ASICs present, with their links up</li><li>Every device answers on its data bus</li><li>Every sensor reads and is in range</li></ul></div>
           <div><h4>Pass means</h4><p>Each blade is exactly what the build says it should be, part by part.</p><h4>What it catches</h4><p>A missing DIMM, a link that trained at x8 instead of x16 or a generation slow, a mis-seated SSD, a firmware mismatch.</p></div>
         </div>
       </section>
 
-      <section class="stage" id="st-runin" data-short="Run-in" data-log="stress: cpu, memory, gpu and nvme loaded together|thermals: every hotspot within limit for the full run|ecc: 0 uncorrectable, corrected errors under threshold|aer: 0 fatal pcie errors|PASS  run-in complete, no hangs">
+      <section class="stage" id="st-runin" data-short="Run-in" data-log="stress cpu: all cores loaded, 0 errors|stress memory: pattern test, 0 uncorrectable errors|stress ssd: sustained read/write, no drops|stress gpu: full load, no resets|health: thermals, power, error counters in limits|PASS  run-in complete, no hangs">
         <h3>Run-in <small>Stress the rack until weak parts fail here</small></h3>
         <p>Hours of stress across CPUs, memory, SSDs and GPUs at once. Pretest proves a part works; run-in proves it keeps working when it is hot and busy. Weak parts tend to fail early in their life, and run-in is where that early life gets spent.</p>
         <div class="stage-cols">
-          <div><h4>What it checks</h4><ul class="checks"><li>Full load on CPU, memory, storage and GPUs together</li><li>Temperatures and power stay within limits</li><li>Memory and PCIe error counters stay clean</li><li>No hangs, resets or dropped devices</li></ul></div>
+          <div><h4>What it checks</h4><ul class="checks"><li>CPUs under full load</li><li>Memory under pattern stress</li><li>SSDs under sustained read and write</li><li>GPUs under full load</li><li>Temperatures, power and error counters within limits the whole time</li></ul></div>
           <div><h4>Pass means</h4><p>The whole run finishes with no uncorrectable errors and corrected errors under threshold.</p><h4>What it catches</h4><p>Marginal memory, parts that fail young, cooling problems, links that drop only under load.</p></div>
         </div>
       </section>
 
-      <section class="stage" id="st-netblade" data-short="Network blade" data-log="cartridge: compute-to-switch links training|links: every lane up across 9 network blades|fabric: 72/72 GPUs joined|PASS  every compute blade sees every other" data-fail-log="cartridge: compute-to-switch links training|links: 1 lane down, blade 07 port 3|fabric: 71/72 GPUs joined, blade 07 gpu 2 missing|FAIL  rack sent to debug">
+      <section class="stage" id="st-netblade" data-short="Network blade" data-log="cartridge: every compute-to-network link trained|comms: every compute blade reaches every other|fabric: 72/72 GPUs joined|PASS  the rack works as one machine" data-fail-log="!cartridge: 1 lane down on blade 07, port 3|!comms: blade 07 cannot reach 2 peers|!fabric: 71/72 GPUs joined, blade 07 gpu 2 missing|FAIL  rack sent to debug">
         <h3>Network blade <small>Connect the compute blades to each other</small></h3>
         <p>Until now each compute blade has been tested alone. Here they start talking to each other, through the network blades and the cable cartridge, the dense bundle of cables at the back of the rack that wires every compute blade to every network blade.</p>
         <svg class="netfig" viewBox="0 0 440 196" role="img" aria-label="Diagram: six compute blades on the left, each cabled through the cable cartridge to all three network blades on the right">
@@ -94,12 +94,12 @@
           <g class="blades net"><rect x="328" y="34" width="92" height="32" rx="4"/><rect x="328" y="90" width="92" height="32" rx="4"/><rect x="328" y="146" width="92" height="32" rx="4"/></g>
         </svg>
         <div class="stage-cols">
-          <div><h4>What it checks</h4><ul class="checks"><li>Every link through the cable cartridge trains</li><li>Every network blade sees every compute blade</li><li>Every GPU joins the fabric: on a 72-GPU rack, all 72</li></ul></div>
+          <div><h4>What it checks</h4><ul class="checks"><li>Every link through the cable cartridge trains</li><li>Every compute blade talks to every other through the network blades</li><li>Every GPU joins the fabric: on a 72-GPU rack, all 72</li></ul></div>
           <div><h4>Pass means</h4><p>The rack works as one machine, not as a stack of separate blades.</p><h4>What it catches</h4><p>A badly seated cartridge, a bent pin, a single bad lane, network-blade firmware problems.</p></div>
         </div>
       </section>
 
-      <section class="stage" id="st-nettest" data-short="Nettest" data-log="links: speed and width correct on every port|rdma: every NIC pair within bandwidth target|latency: within target under load|errors: counters clean after soak|PASS  network clean">
+      <section class="stage" id="st-nettest" data-short="Nettest" data-log="links: every port at expected speed and width|rdma: every NIC pair within bandwidth target|latency: within target under load|errors: counters clean after soak|PASS  network clean">
         <h3>Nettest <small>Test the network itself</small></h3>
         <p>With everything connected, the network gets tested as a network: every NIC, every port, every path the rack will use to talk to the rest of the cluster. RDMA/RoCE traffic runs between every pair, and error counters are watched through a soak.</p>
         <div class="stage-cols">
@@ -108,11 +108,11 @@
         </div>
       </section>
 
-      <section class="stage" id="st-fst" data-short="FST" data-log="fw: every version matches the ship manifest|sensors + buses: final sweep clean|bmc: redfish and ipmi respond, event log clear|config: default settings applied, test settings removed|PASS  ready to ship">
+      <section class="stage" id="st-fst" data-short="FST" data-log="firmware: every version matches the ship manifest|sensors: final sweep, 0 out of range|buses: final sweep, every device answered|config: default settings applied, test settings removed|PASS  ready to ship">
         <h3>FST <small>Final system test, then factory defaults</small></h3>
         <p>One last pass over the things most likely to have drifted while the rack was being tested and debugged: firmware versions, sensors and data buses. Then the rack is set back to its default settings, so the customer gets a clean machine, not a test fixture.</p>
         <div class="stage-cols">
-          <div><h4>What it checks</h4><ul class="checks"><li>Firmware matches the ship manifest</li><li>A final sensor and data-bus sweep</li><li>Out-of-band management works over Redfish and IPMI</li><li>Default settings applied, test settings removed</li></ul></div>
+          <div><h4>What it checks</h4><ul class="checks"><li>Firmware matches the ship manifest</li><li>Every sensor reads and is in range</li><li>Every device answers on its data bus</li><li>Default settings applied, test settings removed</li></ul></div>
           <div><h4>Pass means</h4><p>The rack matches its ship configuration exactly.</p><h4>What it catches</h4><p>A setting left behind by debugging, a part swapped during repair without a re-check, a firmware image that never got re-flashed.</p></div>
         </div>
       </section>
