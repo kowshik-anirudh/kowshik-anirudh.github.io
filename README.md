@@ -9,6 +9,8 @@ website/
   style.css         dark theme, layout, motion (respects prefers-reduced-motion)
   script.js         hero scope canvas, scroll reveal, nav highlight (optional; the page works without it)
   favicon.svg       eye-diagram favicon
+  404.html          custom not-found page (root-absolute paths; assumes the user site at /)
+  robots.txt, sitemap.xml  crawler hints; add new pages to sitemap.xml
   images/           photos, project screenshots, og.png (social preview), apple-touch-icon.png
   .nojekyll         tells GitHub Pages to serve files as-is
 ```

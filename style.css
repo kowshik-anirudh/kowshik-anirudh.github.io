@@ -612,3 +612,10 @@ body::after {
 @media (max-width: 349px) {
   .nav nav { -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent); mask-image: linear-gradient(90deg, #000 85%, transparent); }
 }
+
+/* ---------- 404 ---------- */
+.notfound { min-height: calc(100vh - var(--nav-h) - 8rem); display: grid; align-content: center; padding-top: 3rem; padding-bottom: 3rem; }
+.notfound .code { font-family: var(--mono); font-size: var(--fs-xs); color: var(--accent); letter-spacing: .08em; text-transform: uppercase; margin-bottom: 1rem; }
+.notfound h1 { font-size: clamp(2.2rem, 1.4rem + 4vw, 3.6rem); letter-spacing: -0.035em; max-width: 16ch; }
+.notfound p { color: var(--muted); max-width: 34rem; margin-top: 1rem; }
+.notfound pre { font-family: var(--mono); font-size: .78rem; color: var(--muted); background: var(--bg-elev); border: 1px solid var(--line); border-radius: var(--radius); padding: 1rem 1.1rem; overflow-x: auto; max-width: 34rem; margin: 1.5rem 0 0; }
