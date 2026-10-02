@@ -599,3 +599,16 @@ body::after {
 
 .also { margin: 1.25rem 0 0; font-size: .9rem; color: var(--muted); }
 .also-k { font-family: var(--mono); font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: .08em; color: var(--faint); margin-right: .6rem; }
+
+.reading li.mine { border-top-color: var(--accent-line); }
+.reading li.mine + li { border-top-color: var(--accent-line); }
+.reading li.mine .src { color: var(--accent-strong); }
+@media (max-width: 480px) {
+  .nav-inner { gap: .6rem; }
+  .nav ul { gap: .7rem; padding-right: 0; }
+  .nav li a { font-size: .78rem; }
+  .nav nav { -webkit-mask-image: none; mask-image: none; }
+}
+@media (max-width: 349px) {
+  .nav nav { -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent); mask-image: linear-gradient(90deg, #000 85%, transparent); }
+}
