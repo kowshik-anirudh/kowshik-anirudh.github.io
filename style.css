@@ -726,3 +726,104 @@ body::after {
   .scope { width: 170px; }
   .scope-readout .scope-meas { display: none; }
 }
+
+/* ---------- Method page: the interactive test line (projects/line.js) ----------
+   Without JS every station reads as its own short section. With JS the
+   stations become a rail with a rack that travels along it, a console, and
+   one station shown at a time. */
+.line { --fail: #ef8a7d; margin: 1.75rem 0 0; }
+.stage { padding: 1.5rem 0 .5rem; border-top: 1px solid var(--line); }
+.stage h3 { font-family: var(--display); font-size: 1.35rem; font-weight: 600; letter-spacing: -0.015em; color: var(--text); margin-bottom: .6rem; }
+.stage h3 small { display: block; font-family: var(--font); font-size: .95rem; font-weight: 400; letter-spacing: 0; color: var(--accent); margin-top: .2rem; }
+.stage > p { max-width: 44rem; }
+.stage h4 { font-size: .8rem; font-weight: 600; color: var(--text); margin: 1.1rem 0 .45rem; }
+.stage-cols { display: grid; gap: 0 2.5rem; }
+@media (min-width: 720px) { .stage-cols { grid-template-columns: 1.1fr 1fr; } }
+.stage-cols p { font-size: .95rem; }
+.checks { display: grid; gap: .5rem; }
+.checks li { position: relative; padding-left: 1.6rem; font-size: .95rem; }
+.checks li::before {
+  content: ""; position: absolute; left: 0; top: .32em; width: .95rem; height: .95rem; border-radius: 4px;
+  border: 1px solid var(--line-strong); background: var(--bg-elev);
+  transition: background-color .25s var(--ease), border-color .25s var(--ease);
+}
+.checks li::after { /* the tick */
+  content: ""; position: absolute; left: .33rem; top: .48em; width: .28rem; height: .5rem;
+  border: solid var(--bg); border-width: 0 2px 2px 0; transform: rotate(45deg) scale(0); transition: transform .3s var(--ease);
+}
+.checks li.ok::before { background: var(--accent); border-color: var(--accent); }
+.checks li.ok::after { transform: rotate(45deg) scale(1); }
+.checks li.bad::before { background: var(--fail); border-color: var(--fail); }
+.checks li.bad { color: var(--text); }
+/* no JS: every check is shown as done */
+.line:not(.is-live) .checks li::before { background: var(--accent-soft); border-color: var(--accent-line); }
+
+/* the network-blade figure: compute blades wired to network blades through the cartridge */
+.netfig { display: block; width: 100%; max-width: 30rem; height: auto; margin: 1.25rem 0 .25rem; overflow: visible; }
+.netfig text { fill: var(--faint); font: 11px var(--font); text-anchor: middle; }
+.netfig .blades rect { fill: var(--bg-elev-2); stroke: var(--line-strong); }
+.netfig .blades.net rect { stroke: var(--accent-line); }
+.netfig .cables path { fill: none; stroke: rgba(124,196,184,.28); stroke-width: 1; }
+.line.is-live .stage:not([hidden]) .netfig .cables path { stroke-dasharray: 2 12; stroke: rgba(124,196,184,.7); stroke-linecap: round; }
+@media (prefers-reduced-motion: no-preference) {
+  .line.is-live .stage:not([hidden]) .netfig .cables path { animation: cable 1.2s linear infinite; }
+}
+@keyframes cable { to { stroke-dashoffset: -24; } }
+.line.is-live.has-fault .stage:not([hidden]) .netfig .cables path.bad { stroke: var(--fail); stroke-width: 1.6; stroke-dasharray: 2 4; animation: none; }
+
+/* --- live mode --- */
+.line.is-live { border: 1px solid var(--line); border-radius: var(--radius-lg); background: linear-gradient(180deg, var(--bg-elev) 0%, var(--bg) 60%); padding: 1.25rem 1.25rem 1.5rem; }
+@media (min-width: 720px) { .line.is-live { padding: 1.75rem 2rem 2rem; } }
+.line.is-live .stage { border-top: 0; padding-top: 1.25rem; }
+.line.is-live .stage:focus-visible { outline: 2px solid var(--accent); outline-offset: 6px; border-radius: 6px; }
+
+.line-scroll { overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none; margin: 0 -.25rem; padding: 0 .25rem; }
+.line-scroll::-webkit-scrollbar { display: none; }
+.line-rail { position: relative; display: grid; grid-template-columns: repeat(7, minmax(84px, 1fr)); min-width: 600px; padding-top: 3.1rem; }
+.line-track { position: absolute; left: calc(100% / 14); right: calc(100% / 14); top: calc(3.1rem + 1.55rem); height: 2px; background: var(--line-strong); border-radius: 2px; }
+.line-fill { position: absolute; inset: 0; background: var(--accent); box-shadow: 0 0 10px rgba(124,196,184,.6); transform-origin: 0 50%; transform: scaleX(0); transition: transform .7s var(--ease); }
+.line-stop {
+  position: relative; z-index: 1; display: grid; justify-items: center; gap: .35rem; padding: .25rem .2rem .5rem;
+  background: none; border: 0; color: var(--muted); font: inherit; cursor: pointer; border-radius: 10px;
+}
+.line-stop:hover { color: var(--text); }
+.line-stop:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.line-n { font-family: var(--mono); font-size: .68rem; color: var(--faint); }
+.line-dot { width: 14px; height: 14px; border-radius: 50%; background: var(--bg); border: 2px solid var(--line-strong); transition: background-color .3s, border-color .3s, box-shadow .3s; }
+.line-name { font-size: .82rem; font-weight: 500; white-space: nowrap; }
+.line-stop.is-current { color: var(--text); }
+.line-stop.is-current .line-dot { border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
+.line-stop.is-pass .line-dot { background: var(--accent); border-color: var(--accent); }
+.line-stop.is-fail .line-dot { background: var(--fail); border-color: var(--fail); box-shadow: 0 0 0 4px rgba(239,138,125,.18); }
+.line-stop.is-fail { color: var(--fail); }
+
+/* the rack that rides the line */
+.line-rack {
+  position: absolute; top: .2rem; left: 0; width: 26px; height: 34px; margin-left: -13px;
+  display: grid; gap: 3px; padding: 4px; border-radius: 5px;
+  background: var(--bg-elev-2); border: 1px solid var(--accent); box-shadow: 0 0 18px rgba(124,196,184,.35);
+  transition: transform .7s var(--ease), border-color .3s, box-shadow .3s;
+}
+.line-rack i { display: block; border-radius: 1.5px; background: rgba(124,196,184,.35); }
+.line-rack i:nth-child(odd) { background: rgba(124,196,184,.6); }
+.line.has-fault .line-rack { border-color: var(--fail); box-shadow: 0 0 18px rgba(239,138,125,.45); }
+.line.has-fault .line-rack i:nth-child(2) { background: var(--fail); }
+
+.line-ctl { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem 1.25rem; margin: 1.25rem 0 1rem; }
+.line-ctl .btn { min-height: 40px; }
+.line-fault { display: inline-flex; align-items: center; gap: .5rem; font-size: .9rem; color: var(--muted); cursor: pointer; }
+.line-fault input { width: 1rem; height: 1rem; accent-color: var(--fail); }
+.line-status { flex-basis: 100%; margin: 0; min-height: 1.5em; font-size: .9rem; color: var(--text); }
+.line-log {
+  font-family: var(--mono); font-size: .76rem; line-height: 1.7; min-height: calc(7 * 1.7em + 1.5rem);
+  padding: .75rem 1rem; border-radius: var(--radius); background: #07090a; border: 1px solid var(--line);
+  color: var(--muted); overflow: hidden;
+}
+.line-row { display: flex; gap: .75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+@media (prefers-reduced-motion: no-preference) { .line-row { animation: logline .25s var(--ease) both; } }
+@keyframes logline { from { opacity: 0; transform: translateY(4px); } }
+.line-tag { color: var(--faint); flex: none; }
+.line-msg { overflow: hidden; text-overflow: ellipsis; }
+.line-pass { color: var(--accent); }
+.line-failmsg { color: var(--fail); }
+@media (max-width: 559px) { .line-row { flex-direction: column; gap: 0; white-space: normal; } .line-log { min-height: 15rem; } }
