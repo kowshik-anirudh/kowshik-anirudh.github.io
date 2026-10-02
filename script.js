@@ -74,7 +74,7 @@
     var W = 0, H = 0, dpr = 1;
     var NOISE = [0.035, 0.11];   // amplitude noise (fraction of swing), calm -> jittery
     var JIT = [0.03, 0.13];      // timing jitter (fraction of a unit interval)
-    var heat = 0, heatTarget = 0;
+    var heat = 0, heatTarget = 0, scrollHeat = 0;
 
     // PRBS7 (x^7 + x^6 + 1)
     var lfsr = 0x5a;
@@ -118,7 +118,8 @@
         var px = X(t), py = Y(volt(tr, t));
         if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
       }
-      ctx.strokeStyle = 'rgba(124,196,184,' + alpha + ')';
+      // brighter than --accent so the traces survive a dim laptop panel
+      ctx.strokeStyle = 'rgba(150,232,216,' + alpha + ')';
       ctx.stroke();
     };
 
@@ -135,13 +136,17 @@
 
     var size = function () {
       var r = canvas.getBoundingClientRect();
+      // A hidden tab, a collapsed layout or a late stylesheet can report 0x0:
+      // keep the last good size and let ResizeObserver call back later.
+      if (r.width < 2 || r.height < 2) return false;
       dpr = Math.min(window.devicePixelRatio || 1, 2);
-      W = Math.max(1, Math.round(r.width * dpr));
-      H = Math.max(1, Math.round(r.height * dpr));
+      W = Math.round(r.width * dpr);
+      H = Math.round(r.height * dpr);
       if (canvas.width !== W) canvas.width = W;
       if (canvas.height !== H) canvas.height = H;
-      ctx.lineWidth = 1.1 * dpr;
+      ctx.lineWidth = 1.5 * dpr;
       ctx.lineJoin = 'round';
+      return true;
     };
 
     // A full persistence frame: used on load, on resize, and as the reduced-motion view.
@@ -149,30 +154,41 @@
       ctx.globalCompositeOperation = 'source-over';
       ctx.clearRect(0, 0, W, H);
       ctx.globalCompositeOperation = 'lighter';
-      for (var i = 0; i < 200; i++) stroke(makeTrace(), 0, 2, 0.14);
+      for (var i = 0; i < 200; i++) stroke(makeTrace(), 0, 2, 0.2);
       readout();
     };
 
-    size();
-    drawStatic();
-    fig.classList.add('live');
+    // Only hide the SVG fallback once the canvas really holds a frame.
+    var paint = function () {
+      if (!size()) return;
+      drawStatic();
+      fig.classList.add('live');
+    };
+    paint();
 
     var running = false, visible = true, beam = 0, active = [], lastRead = 0, raf = 0;
-    var BATCH = 28, SWEEP_MS = 1000, last = 0;
+    var BATCH = 28, SWEEP_MS = 1000, last = 0, fadeAcc = 0;
     var frame = function (now) {
       if (!running) return;
       var dt = last ? Math.min(now - last, 64) : 16;
       last = now;
-      heat += (heatTarget - heat) * 0.06;
-      // persistence: fade what is already on screen
-      ctx.globalCompositeOperation = 'destination-out';
-      ctx.fillStyle = 'rgba(0,0,0,' + (0.012 * dt / 16).toFixed(4) + ')';
-      ctx.fillRect(0, 0, W, H);
+      if (!fig.classList.contains('live')) paint();
+      heat += (Math.max(heatTarget, scrollHeat) - heat) * 0.06;
+      // Persistence: fade what is already on screen in fixed 50 ms steps.
+      // Tiny per-frame fades (high-refresh panels) round to zero in an 8-bit
+      // canvas and leave grey ghosts, so the step is the same at 60 or 165 Hz.
+      fadeAcc += dt;
+      if (fadeAcc >= 50) {
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.fillStyle = 'rgba(0,0,0,' + (0.045 * Math.floor(fadeAcc / 50)).toFixed(3) + ')';
+        ctx.fillRect(0, 0, W, H);
+        fadeAcc %= 50;
+      }
       ctx.globalCompositeOperation = 'lighter';
       if (!active.length) { active = []; for (var i = 0; i < BATCH; i++) active.push(makeTrace()); }
       var from = beam;
       beam = Math.min(2, beam + 2 * dt / SWEEP_MS);
-      for (var j = 0; j < active.length; j++) stroke(active[j], Math.max(0, from - 0.02), beam, 0.22);
+      for (var j = 0; j < active.length; j++) stroke(active[j], Math.max(0, from - 0.02), beam, 0.3);
       if (beam >= 2) { beam = 0; active = []; }
       if (now - lastRead > 450) { readout(); lastRead = now; }
       raf = requestAnimationFrame(frame);
@@ -180,19 +196,27 @@
     var start = function () { if (running || reduce || !visible || document.hidden) return; running = true; last = 0; raf = requestAnimationFrame(frame); };
     var stop = function () { running = false; cancelAnimationFrame(raf); };
 
-    var resized = function () { size(); if (!running) drawStatic(); };
+    var resized = function () { if (!running) paint(); else size(); };
     if ('ResizeObserver' in window) new ResizeObserver(resized).observe(canvas);
     else window.addEventListener('resize', resized, { passive: true });
+    // On hybrid-GPU laptops a GPU switch, sleep or monitor change can drop the
+    // canvas backing store and leave a blank box. Show the SVG while it is
+    // gone, and repaint when the browser hands the context back.
+    canvas.addEventListener('contextlost', function () { fig.classList.remove('live'); stop(); });
+    canvas.addEventListener('contextrestored', function () { paint(); start(); });
+    window.addEventListener('pageshow', function (e) { if (e.persisted) { paint(); start(); } });
 
     if (reduce) { if (hint) hint.remove(); return; }
 
     if (hasIO) {
       new IntersectionObserver(function (entries) {
-        visible = entries[0].isIntersecting;
+        visible = entries[entries.length - 1].isIntersecting;
         if (visible) start(); else stop();
       }).observe(canvas);
     }
-    document.addEventListener('visibilitychange', function () { if (document.hidden) stop(); else start(); });
+    // A tab opened in the background has no frames and may have had no
+    // layout: repaint and start when it is first shown.
+    document.addEventListener('visibilitychange', function () { if (document.hidden) stop(); else { if (!fig.classList.contains('live')) paint(); start(); } });
     start();
 
     // Point at it (or tap it) to add jitter; the readout closes up to match.

@@ -124,24 +124,24 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   border: 1px solid var(--line-strong);
   background:
     url("images/eye-fallback.svg") center / 100% 100% no-repeat,
-    linear-gradient(rgba(236,235,230,.05) 1px, transparent 1px) 0 0 / 12.5% 12.5%,
-    linear-gradient(90deg, rgba(236,235,230,.05) 1px, transparent 1px) 0 0 / 12.5% 12.5%,
-    radial-gradient(120% 90% at 50% 40%, #121a19 0%, #0b0e0e 70%);
+    linear-gradient(rgba(236,235,230,.085) 1px, transparent 1px) 0 0 / 12.5% 12.5%,
+    linear-gradient(90deg, rgba(236,235,230,.085) 1px, transparent 1px) 0 0 / 12.5% 12.5%,
+    radial-gradient(120% 90% at 50% 40%, #0f1716 0%, #070909 70%);
   box-shadow: inset 0 0 0 1px rgba(255,255,255,.02), inset 0 0 60px rgba(0,0,0,.6), 0 30px 80px -45px rgba(124,196,184,.45);
 }
 .scope-screen::after { /* center crosshair, like scope graticule */
   content: ""; position: absolute; inset: 0; pointer-events: none;
   background:
-    linear-gradient(rgba(236,235,230,.10), rgba(236,235,230,.10)) 50% 0 / 1px 100% no-repeat,
-    linear-gradient(rgba(236,235,230,.10), rgba(236,235,230,.10)) 0 50% / 100% 1px no-repeat;
+    linear-gradient(rgba(236,235,230,.17), rgba(236,235,230,.17)) 50% 0 / 1px 100% no-repeat,
+    linear-gradient(rgba(236,235,230,.17), rgba(236,235,230,.17)) 0 50% / 100% 1px no-repeat;
 }
 .scope-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 /* Once the canvas is drawing, hide the static fallback traces (grid stays) */
 .scope.live .scope-screen {
   background:
-    linear-gradient(rgba(236,235,230,.05) 1px, transparent 1px) 0 0 / 12.5% 12.5%,
-    linear-gradient(90deg, rgba(236,235,230,.05) 1px, transparent 1px) 0 0 / 12.5% 12.5%,
-    radial-gradient(120% 90% at 50% 40%, #121a19 0%, #0b0e0e 70%);
+    linear-gradient(rgba(236,235,230,.085) 1px, transparent 1px) 0 0 / 12.5% 12.5%,
+    linear-gradient(90deg, rgba(236,235,230,.085) 1px, transparent 1px) 0 0 / 12.5% 12.5%,
+    radial-gradient(120% 90% at 50% 40%, #0f1716 0%, #070909 70%);
 }
 .scope-readout { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .25rem 1rem; margin-top: .7rem; font-family: var(--mono); font-size: var(--fs-xs); color: var(--faint); letter-spacing: .04em; }
 .scope-meas b { color: var(--accent); font-weight: 500; font-variant-numeric: tabular-nums; }
