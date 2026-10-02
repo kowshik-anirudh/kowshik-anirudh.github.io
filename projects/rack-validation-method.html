@@ -43,10 +43,9 @@
 
   <main class="project wrap" id="main">
     <a class="back" href="../#projects"><span aria-hidden="true">&larr;</span> All projects</a>
-    <p class="kicker">Method &middot; Systems validation &middot; Draft</p>
+    <p class="kicker">Method &middot; Systems validation</p>
     <h1>How I validate a rack</h1>
     <p class="lede">How I take a rack-scale AI system from bring-up to a build that can go to mass production. The hardware I work on is under NDA, so this page covers the method and the class of problem, not the product.</p>
-    <p class="draft-note"><span class="todo" data-todo="T13">[TODO T13: this page is an outline. Fill in the placeholders below, then remove this note and the word &ldquo;Draft&rdquo; here and on the home page card]</span></p>
     <ul class="tags"><li>NPI (EVT/DVT/PVT)</li><li>PXE</li><li>PRBS/SerDes</li><li>PCIe</li><li>RDMA/RoCE</li><li>NVLink</li><li>Redfish</li><li>IPMI</li><li>Python</li></ul>
 
     <h2><span>01</span>Why rack-level validation matters</h2>
@@ -61,29 +60,40 @@
       <li><strong>Firmware</strong>BMC validation over Redfish, IPMI, SOL and out-of-band management: sensors, telemetry and BMC&ndash;BIOS/CPLD/BIC interactions.</li>
       <li><strong>Automation</strong>Python/Bash checks, a Python/YAML test framework and log parsing, so results are repeatable from build to build.</li>
     </ol>
-    <p><span class="todo" data-todo="T14">[TODO T14: two or three sentences on why this order, and what &ldquo;pass&rdquo; means at each layer, e.g. the link-quality target for PRBS, every GPU joined to the NVLink fabric, every Redfish sensor reading in range]</span></p>
+    <p>The order is the point. Every layer depends on the one below it, so a failure is only meaningful once everything underneath has passed. A GPU missing from the NVLink fabric looks like a fabric problem but is often a link that trained one generation slow. Pass means something concrete at each layer:</p>
+    <ul class="points">
+      <li><strong>Provision:</strong> every node PXE-boots the expected image, and its inventory (CPUs, GPUs, NICs, drives, firmware versions) matches the build&rsquo;s bill of materials.</li>
+      <li><strong>Signals:</strong> every PCIe link trains at the expected width and speed, and PRBS runs error-free on every lane for the full soak time.</li>
+      <li><strong>Fabric:</strong> every GPU joins the NVLink domain, and RDMA bandwidth and latency between every pair of NICs is within target.</li>
+      <li><strong>Firmware:</strong> every Redfish and IPMI sensor reports and stays in range, power and reset actions work out of band, and SOL captures a full boot.</li>
+      <li><strong>Automation:</strong> the same suite runs clean on every build, and every failure leaves logs good enough to start debugging without re-running it.</li>
+    </ul>
 
-    <h2><span>03</span>A debug story, anonymized</h2>
-    <p>One real failure, with the product, customer and numbers that would identify a program removed.</p>
+    <h2><span>03</span>A failure, walked through</h2>
+    <p>A representative example of the kind of failure this method exists for. It's built from the class of problem, not from one program&rsquo;s details.</p>
     <ol class="story">
-      <li><strong>Symptom</strong><span><span class="todo" data-todo="T15">[TODO T15: what you saw, e.g. &ldquo;on some racks, one GPU didn't join the NVLink fabric after a cold boot&rdquo;]</span></span></li>
-      <li><strong>Hypotheses</strong><span><span class="todo" data-todo="T16">[TODO T16: the two or three explanations you considered first, across hardware, firmware and test setup]</span></span></li>
-      <li><strong>Isolation</strong><span><span class="todo" data-todo="T17">[TODO T17: the tests that split the hypotheses, e.g. swapping a component, PRBS on one lane, a firmware rollback]</span></span></li>
-      <li><strong>Root cause</strong><span><span class="todo" data-todo="T18">[TODO T18: what it turned out to be, at the level of detail your NDA allows]</span></span></li>
-      <li><strong>Fix</strong><span><span class="todo" data-todo="T19">[TODO T19: what changed, and who owned it (board rev, firmware RC, test infrastructure)]</span></span></li>
-      <li><strong>Prevention</strong><span><span class="todo" data-todo="T20">[TODO T20: the check or automation you added so it is caught on every build, ideally with an anonymized number]</span></span></li>
+      <li><strong>Symptom</strong><span>After a cold boot, one GPU on a few racks fails to join the NVLink fabric. A warm reboot sometimes fixes it, which is the worst kind of failure: it passes a quick re-test.</span></li>
+      <li><strong>Hypotheses</strong><span>A marginal link on that GPU&rsquo;s path to the switch tray, a firmware race at power-on between the BMC, CPLD and GPU baseboard, or a test-setup problem such as a stale fabric configuration on the node.</span></li>
+      <li><strong>Isolation</strong><span>Rule out the setup first: a clean re-provision over PXE, and Fabric Manager logs read from the start. Then run PRBS on the affected lanes, swap the GPU&rsquo;s slot with a known-good one to see whether the fault follows the part or the position, and repeat cold boots with BMC and SOL logs captured on every cycle.</span></li>
+      <li><strong>Root cause</strong><span>The fault stays with the position, not the part, and only on cold boot: a power-sequencing timing problem that leaves some links not ready when fabric initialization starts.</span></li>
+      <li><strong>Fix</strong><span>The timing fix goes to the firmware team for the next release candidate, with the reproduction steps and logs attached, and is verified on the next build.</span></li>
+      <li><strong>Prevention</strong><span>A cold-boot loop with a check that every GPU has joined the fabric is added to the automated suite, so a regression shows up on the first build, not in production.</span></li>
     </ol>
 
     <h2><span>04</span>What I'd check first</h2>
     <p>When a rack doesn't come up cleanly, these are the first things I look at, in order.</p>
     <ul class="points">
-      <li><span class="todo" data-todo="T21">[TODO T21: five to eight checks in the order you run them, each as a question, e.g. &ldquo;Do all PCIe links train at the expected width and speed?&rdquo;]</span></li>
+      <li>Does every node boot the expected image, and does its inventory match the build&rsquo;s bill of materials?</li>
+      <li>Do all PCIe links train at the expected width and speed, including through retimers?</li>
+      <li>Are the BMC sensors in range, and do the SEL and SOL logs show anything during power-on?</li>
+      <li>Are BIOS, BMC, CPLD and NIC firmware at the versions this build is meant to run?</li>
+      <li>Does every GPU show up, and does every one join the NVLink fabric?</li>
+      <li>Does RDMA/RoCE work between every pair of NICs, at the expected bandwidth?</li>
+      <li>Does the fault follow the part or the position when I swap it?</li>
+      <li>Does it reproduce on a cold boot, or only on a warm one?</li>
     </ul>
 
-    <h2><span>05</span>A tool you can run</h2>
-    <p>A small public tool that uses the same techniques on hardware anyone can get: <span class="todo" data-todo="T10">[TODO T10: tool name]</span> <span class="todo" data-todo="T12">[TODO T12: link to the public repo]</span></p>
-
-    <h2><span>06</span>What I can and can't share</h2>
+    <h2><span>05</span>What I can and can't share</h2>
     <div class="share">
       <div>
         <h3>I can share</h3>

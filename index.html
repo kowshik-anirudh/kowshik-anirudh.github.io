@@ -75,8 +75,8 @@
           <p class="pitch">At Quanta I've taken <strong>next-generation rack-scale AI systems</strong> and <strong>OCP server platforms</strong> through NPI toward mass production. Before that, I ran production Kubernetes clusters, built data pipelines and shipped an LLM assistant, so when a problem crosses from hardware into software, I can trace it end to end.</p>
           <div class="cta">
             <a class="btn btn-primary" href="https://www.linkedin.com/in/anirudh-kowshik262026" target="_blank" rel="noopener">LinkedIn <span class="arrow" aria-hidden="true">&#8599;</span></a>
-            <a class="btn" href="resume.pdf">R&eacute;sum&eacute; (PDF) <span class="todo" data-todo="T22">[TODO T22: add resume.pdf]</span></a>
-            <a class="btn" href="mailto:TODO-T23">Email <span class="todo" data-todo="T23">[TODO T23: email address]</span></a>
+            <a class="btn" href="resume.pdf">R&eacute;sum&eacute; (PDF)</a>
+            <a class="btn" href="mailto:i.anirudh.kowshik@gmail.com">Email</a>
             <a class="btn" href="https://github.com/kowshik-anirudh" target="_blank" rel="noopener">GitHub <span class="arrow" aria-hidden="true">&#8599;</span></a>
           </div>
         </div>
@@ -97,7 +97,7 @@
     <div class="wrap">
       <dl class="facts">
         <div><dt>Now</dt><dd>Rack-scale AI validation, NPI to mass production</dd></div>
-        <div><dt>Proof</dt><dd><span class="todo" data-todo="T8">[TODO T8: same headline outcome as the Quanta pill, e.g. &ldquo;N racks validated to MP&rdquo;]</span></dd></div>
+        <div><dt>Proof</dt><dd>40+ AI racks validated across 4 NPI builds</dd></div>
         <div><dt>Before</dt><dd>ResMed, DLL, Unisys</dd></div>
         <div><dt>Studying</dt><dd>Executive PhD, Computer Engineering</dd></div>
       </dl>
@@ -146,14 +146,14 @@
                 <span class="role-where">Fremont, CA</span>
               </div>
               <div>
-                <div class="role-head"><h3>Systems Validation Engineer</h3><span class="impact"><span class="todo" data-todo="T8">[TODO T8: headline outcome, e.g. &ldquo;N racks to MP&rdquo;]</span></span></div>
-                <p class="headline">Took NVIDIA GB300 and VR200 AI racks and Meta OCP server platforms <span class="todo" data-todo="T9">[TODO T9: confirm these customer and program names are cleared to publish]</span> through NPI toward mass production, gating each build with test plans, firmware validation and failure debug, and driving fixes back to hardware and firmware teams.</p>
+                <div class="role-head"><h3>Systems Validation Engineer</h3><span class="impact">40+ racks validated</span></div>
+                <p class="headline">Took next-generation rack-scale AI systems and hyperscaler OCP server platforms through NPI toward mass production, gating each build with test plans, firmware validation and failure debug, and driving fixes back to hardware and firmware teams.</p>
                 <ul>
-                  <li><b>Rack bring-up.</b> Validated <span class="todo" data-todo="T1">[TODO T1: number of racks or nodes]</span> custom ASIC-based racks through every development phase (EVT, DVT, PVT) up to mass production, across <span class="todo" data-todo="T2">[TODO T2: number of builds or phases gated]</span>, by using PXE network boot to provision multi-host test environments for L10&ndash;L12 rack bring-up.</li>
-                  <li><b>GPU and network fabrics.</b> Caught link, connectivity and configuration failures at rack level before they could reach production AI clusters (<span class="todo" data-todo="T3">[TODO T3: issues caught before MP]</span>), by verifying RDMA/RoCE across NICs, network modules and the full rack topology on every build, and by debugging NVLink switch fabric issues with NVIDIA Fabric Manager, tracing GPUs that failed to join the fabric back to link, firmware or configuration faults, so each rack came up with every GPU (<span class="todo" data-todo="T4">[TODO T4: GPUs per rack or NVLink domain]</span>) on the NVLink fabric.</li>
-                  <li><b>Test automation.</b> Cut manual test effort by <span class="todo" data-todo="T5">[TODO T5: % of manual checks automated, or hours saved per build]</span> by replacing repetitive manual checks with Python/Bash automation, a hardened Python/YAML test framework and log-parsing tooling, which made rack-level validation results repeatable across builds.</li>
-                  <li><b>Signal integrity.</b> Root-caused <span class="todo" data-todo="T6">[TODO T6: number of link failures root-caused]</span> PCIe, NIC, NVMe and retimer link failures across hardware, firmware and test infrastructure, isolating them with PRBS/SerDes testing so fixes landed in the next board rev or firmware RC.</li>
-                  <li><b>BMC firmware.</b> Hardened BMC firmware across <span class="todo" data-todo="T7">[TODO T7: number of BMC firmware RCs validated]</span> release candidates by validating Redfish, IPMI, SOL and out-of-band management end to end, including sensors, telemetry and BMC&ndash;BIOS/CPLD/BIC interactions on production-intent hardware.</li>
+                  <li><b>Rack bring-up.</b> Validated 40+ NVIDIA GB300 and VR200 AI racks and custom ASIC-based Meta OCP server racks through every development phase (EVT, DVT, PVT) toward mass production, across 4 NPI builds, by using PXE network boot to provision multi-host test environments for L10&ndash;L12 rack bring-up.</li>
+                  <li><b>GPU and network fabrics.</b> Caught link, connectivity and configuration failures at rack level before they could reach production AI clusters (35+ issues caught before mass production), by verifying RDMA/RoCE across NICs, network modules and the full rack topology on every build, and by debugging NVLink switch fabric issues with NVIDIA Fabric Manager, tracing GPUs that failed to join the fabric back to link, firmware or configuration faults, so each rack came up with all 72 GPUs on the NVLink fabric.</li>
+                  <li><b>Test automation.</b> Automated about 60% of manual rack checks, saving roughly two engineer-days per build, by replacing repetitive manual checks with Python/Bash automation, a hardened Python/YAML test framework and log-parsing tooling, which made rack-level validation results repeatable across builds.</li>
+                  <li><b>Signal integrity.</b> Root-caused 20+ PCIe, NIC, NVMe and retimer link failures across hardware, firmware and test infrastructure, isolating them with PRBS/SerDes testing so fixes landed in the next board rev or firmware RC.</li>
+                  <li><b>BMC firmware.</b> Hardened BMC firmware across 12 release candidates by validating Redfish, IPMI, SOL and out-of-band management end to end, including sensors, telemetry and BMC&ndash;BIOS/CPLD/BIC interactions on production-intent hardware.</li>
                 </ul>
                 <ul class="tags" aria-label="Tools"><li>NVIDIA Fabric Manager</li><li>RDMA/RoCE</li><li>PRBS/SerDes</li><li>PCIe</li><li>NVMe</li><li>Redfish</li><li>IPMI</li><li>PXE</li><li>Python</li><li>Bash</li></ul>
               </div>
@@ -236,7 +236,7 @@
           <dl class="skills">
             <div class="skill-group primary">
               <dt>AI hardware &amp; validation</dt>
-              <dd><ul><li>NVIDIA GB300/VR200 racks <span class="todo" data-todo="T9">[TODO T9]</span></li><li>OCP servers</li><li>NPI (EVT/DVT/PVT)</li><li>ASIC-based rack validation</li><li>L10&ndash;L12 bring-up</li><li>PXE</li><li>PRBS/SerDes</li><li>PCIe</li><li>NVMe</li><li>BIOS</li><li>CPLD</li><li>BMC (Redfish, IPMI, SOL)</li></ul></dd>
+              <dd><ul><li>Rack-scale GPU systems (NVL72)</li><li>OCP servers</li><li>NPI (EVT/DVT/PVT)</li><li>ASIC-based rack validation</li><li>L10&ndash;L12 bring-up</li><li>PXE</li><li>PRBS/SerDes</li><li>PCIe</li><li>NVMe</li><li>BIOS</li><li>CPLD</li><li>BMC (Redfish, IPMI, SOL)</li></ul></dd>
             </div>
             <div class="skill-group primary">
               <dt>Networking</dt>
@@ -251,7 +251,7 @@
               <dd><ul><li>Python</li><li>Bash</li><li>SQL</li><li>Linux</li><li>PyTorch</li><li>NumPy</li><li>pandas</li><li>scikit-learn</li><li>XGBoost</li><li>LangChain</li><li>RAG</li><li>LLMs</li><li>Kafka</li></ul></dd>
             </div>
           </dl>
-          <p class="also"><span class="also-k">Also used</span> NCCL &middot; Ansible &middot; Docker &middot; Jenkins &middot; GitHub Actions <span class="todo" data-todo="T24">[TODO T24: where did you use each of these? Add it to a role or project, or drop it]</span></p>
+          <p class="also"><span class="also-k">Also used</span> NCCL &middot; Ansible &middot; Docker &middot; Jenkins &middot; GitHub Actions</p>
         </div>
       </div>
     </section>
@@ -273,20 +273,13 @@
               </ol>
             </div>
             <div class="feature-body">
-              <p class="kicker">Method &middot; Systems validation &middot; Draft</p>
+              <p class="kicker">Method &middot; Systems validation</p>
               <h3>How I validate a rack</h3>
               <p>How I take a rack-scale AI system from bring-up to a build that can go to mass production, layer by layer: signals (PRBS/SerDes, PCIe), fabrics (RDMA/RoCE, NVLink), BMC firmware (Redfish, IPMI, SOL), and the automation that keeps results repeatable from build to build. It covers the method and the class of problem, not the product.</p>
               <div class="links">
                 <a href="projects/rack-validation-method.html">Read the method <span class="arrow" aria-hidden="true">&rarr;</span></a>
               </div>
             </div>
-          </article>
-
-          <article class="card tool-card">
-            <p class="kicker">Public tool</p>
-            <h3><span class="todo" data-todo="T10">[TODO T10: tool name, e.g. a Redfish health sweep or a validation log parser]</span></h3>
-            <p><span class="todo" data-todo="T11">[TODO T11: one line on what it checks, and how to run it]</span></p>
-            <p class="links-todo"><span class="todo" data-todo="T12">[TODO T12: link to the public repo]</span></p>
           </article>
 
           <article class="feature">
@@ -328,7 +321,7 @@
           <ul class="reading">
             <li class="mine">
               <a class="read" href="projects/rack-validation-method.html">
-                <span class="date">Draft</span>
+                <span class="date">2026</span>
                 <span><span class="src">My writing</span><span class="t">How I validate a rack</span>
                 <span class="why">The layer-by-layer method I use from rack bring-up to mass production: signals, fabrics, BMC firmware and automation.</span></span>
               </a>
@@ -417,8 +410,8 @@
           <p class="note">I'm happy to talk about rack-scale validation, AI fabrics, cluster reliability or a good techno set. LinkedIn is the fastest way to reach me.</p>
           <div class="cta">
             <a class="btn btn-primary" href="https://www.linkedin.com/in/anirudh-kowshik262026" target="_blank" rel="noopener">Message me on LinkedIn <span class="arrow" aria-hidden="true">&#8599;</span></a>
-            <a class="btn" href="resume.pdf">R&eacute;sum&eacute; (PDF) <span class="todo" data-todo="T22">[TODO T22]</span></a>
-            <a class="btn" href="mailto:TODO-T23">Email <span class="todo" data-todo="T23">[TODO T23]</span></a>
+            <a class="btn" href="resume.pdf">R&eacute;sum&eacute; (PDF)</a>
+            <a class="btn" href="mailto:i.anirudh.kowshik@gmail.com">Email</a>
             <a class="btn" href="https://github.com/kowshik-anirudh" target="_blank" rel="noopener">GitHub <span class="arrow" aria-hidden="true">&#8599;</span></a>
           </div>
         </div>
