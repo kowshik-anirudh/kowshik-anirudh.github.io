@@ -168,7 +168,8 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .hero-text > *:nth-child(3) { animation-delay: .1s; }
 .hero-text > *:nth-child(4) { animation-delay: .15s; }
 .hero-text > *:nth-child(5) { animation-delay: .2s; }
-@keyframes rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+/* transform only: text is painted (and counts for LCP) from the first frame */
+@keyframes rise { from { transform: translateY(10px); } to { transform: none; } }
 
 .cta { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2rem; }
 .btn {
