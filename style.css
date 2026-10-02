@@ -596,3 +596,6 @@ body::after {
   .hero-line { margin: 1rem 0 1.25rem; }
   .btn { min-height: 44px; padding: 0 1.1rem; }
 }
+
+.also { margin: 1.25rem 0 0; font-size: .9rem; color: var(--muted); }
+.also-k { font-family: var(--mono); font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: .08em; color: var(--faint); margin-right: .6rem; }
