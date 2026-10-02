@@ -245,14 +245,40 @@
       <div class="section-grid">
         <header class="sec-head"><h2 id="proj-h">Projects</h2></header>
         <div>
-          <p class="sec-line">Most of my validation work is under NDA. These are projects I built on my own time.</p>
+          <p class="sec-line">My hardware work is under NDA, so here is <em>the method instead</em>, and the tools I can share in public.</p>
+
+          <article class="feature feature-method">
+            <div class="feature-media method-media" aria-hidden="true">
+              <ol class="layers">
+                <li><span>L4</span>Automation</li>
+                <li><span>L3</span>Firmware</li>
+                <li><span>L2</span>Fabric</li>
+                <li><span>L1</span>Signals</li>
+              </ol>
+            </div>
+            <div class="feature-body">
+              <p class="kicker">Method &middot; Systems validation &middot; Draft</p>
+              <h3>How I validate a rack</h3>
+              <p>How I take a rack-scale AI system from bring-up to a build that can go to mass production, layer by layer: signals (PRBS/SerDes, PCIe), fabrics (RDMA/RoCE, NVLink), BMC firmware (Redfish, IPMI, SOL), and the automation that keeps results repeatable from build to build. It covers the method and the class of problem, not the product.</p>
+              <div class="links">
+                <a href="projects/rack-validation-method.html">Read the method <span class="arrow" aria-hidden="true">&rarr;</span></a>
+              </div>
+            </div>
+          </article>
+
+          <article class="card tool-card">
+            <p class="kicker">Public tool</p>
+            <h3><span class="todo" data-todo="T10">[TODO T10: tool name, e.g. a Redfish health sweep or a validation log parser]</span></h3>
+            <p><span class="todo" data-todo="T11">[TODO T11: one line on what it checks, and how to run it]</span></p>
+            <p class="links-todo"><span class="todo" data-todo="T12">[TODO T12: link to the public repo]</span></p>
+          </article>
 
           <article class="feature">
             <figure class="feature-media">
               <img src="images/projects/marketpulse-landing.jpg" alt="MarketPulse landing page with a ticker search box" width="1374" height="888" loading="lazy" decoding="async">
             </figure>
             <div class="feature-body">
-              <p class="kicker">Serverless &middot; LLM &middot; AWS</p>
+              <p class="kicker">Side project &middot; Serverless &middot; LLM &middot; AWS</p>
               <h3>MarketPulse</h3>
               <p>Type a ticker and get a short, plain-English brief built from computed indicators such as RSI, ATR and moving averages. FastAPI runs on AWS Lambda behind API Gateway, with S3 caching, Plotly charts and an LLM that may only use the numbers it is given.</p>
               <ul class="tags" aria-label="Tech"><li>Python</li><li>FastAPI</li><li>Lambda</li><li>API Gateway</li><li>S3</li><li>OpenAI API</li><li>Plotly</li></ul>
@@ -264,27 +290,12 @@
             </div>
           </article>
 
-          <h3 class="sub">Data engineering pipelines on GCP, AWS and Azure</h3>
-          <div class="cards-3">
-            <a class="card" href="projects/trip-analytics-gcp.html">
-              <p class="kicker">GCP</p>
-              <h3>Trip Analytics</h3>
-              <p>Turns raw taxi trip data into a star schema with Mage on Compute Engine and pandas, then serves it through BigQuery and a Looker Studio dashboard.</p>
-              <span class="more">Read more <span class="arrow" aria-hidden="true">&rarr;</span></span>
-            </a>
-            <a class="card" href="projects/youtube-analytics-aws.html">
-              <p class="kicker">AWS</p>
-              <h3>YouTube Trending Analytics</h3>
-              <p>A serverless data lake for YouTube trending-video data, built on S3, event-driven Lambda, Glue ETL to Parquet, Athena and QuickSight.</p>
-              <span class="more">Read more <span class="arrow" aria-hidden="true">&rarr;</span></span>
-            </a>
-            <a class="card" href="projects/tokyo-olympics-azure.html">
-              <p class="kicker">Azure</p>
-              <h3>Tokyo Olympics Analytics</h3>
-              <p>Loads Tokyo Olympics data on 11,000+ athletes into ADLS Gen2 with Data Factory, transforms it in Databricks PySpark and queries it in Synapse SQL.</p>
-              <span class="more">Read more <span class="arrow" aria-hidden="true">&rarr;</span></span>
-            </a>
-          </div>
+          <h3 class="sub">Earlier data-engineering work</h3>
+          <ul class="mini">
+            <li><a href="projects/trip-analytics-gcp.html"><span class="mini-k">GCP</span><span class="mini-t">Trip Analytics</span><span class="mini-d">Taxi trips to a star schema with Mage and pandas, served through BigQuery and Looker Studio.</span></a></li>
+            <li><a href="projects/youtube-analytics-aws.html"><span class="mini-k">AWS</span><span class="mini-t">YouTube Trending Analytics</span><span class="mini-d">A serverless data lake on S3, Lambda, Glue, Athena and QuickSight.</span></a></li>
+            <li><a href="projects/tokyo-olympics-azure.html"><span class="mini-k">Azure</span><span class="mini-t">Tokyo Olympics Analytics</span><span class="mini-d">11,000+ athletes through Data Factory, ADLS Gen2, Databricks PySpark and Synapse SQL.</span></a></li>
+          </ul>
           <p class="credit">The three pipelines started as guided learning projects. Sources are credited in each repo.</p>
 
           <div class="nda"><p>More code and experiments are on <a href="https://github.com/kowshik-anirudh" target="_blank" rel="noopener">GitHub <span class="arrow" aria-hidden="true">&#8599;</span></a></p></div>

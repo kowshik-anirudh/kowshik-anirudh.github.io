@@ -5,7 +5,7 @@ A static, single-page site with plain HTML, CSS and a small JS file. It has no f
 ```
 website/
   index.html        home page (hero, about, experience, skills, projects, reading, off the clock, contact)
-  projects/*.html   project case studies (share style.css)
+  projects/*.html   case studies and the rack-validation method page (share style.css)
   style.css         dark theme, layout, motion (respects prefers-reduced-motion)
   script.js         hero scope canvas, scroll reveal, nav highlight (optional; the page works without it)
   favicon.svg       eye-diagram favicon
@@ -79,5 +79,5 @@ Check GitHub's current docs before changing DNS: https://docs.github.com/en/page
 ## Updating content
 
 - **Reading list:** each entry in `#reading` has a title link, source, date and a one-line note. Refresh it every few months so it stays current.
-- **Projects:** add an `<article class="card">` in `#projects`. The grid adapts automatically.
+- **Projects:** `#projects` leads with the validation method (`projects/rack-validation-method.html`) and a slot for a public tool, then MarketPulse, then the earlier data-engineering work as a compact `.mini` list. New case studies can copy `projects/marketpulse.html` (`.project`, `.flow`, `.points`).
 - **Skills:** the `#skills` section mirrors the skill groups in the resume. Groups marked `primary` (hardware validation, networking) get the accent styling; keep them first.
