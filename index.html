@@ -40,8 +40,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20261001">
-  <script defer src="script.js?v=20261001"></script>
+  <link rel="stylesheet" href="style.css?v=20261002">
+  <script defer src="script.js?v=20261002"></script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -77,15 +77,7 @@
             <a class="btn" href="mailto:i.anirudh.kowshik@gmail.com">Email</a>
             <a class="btn" href="https://github.com/kowshik-anirudh" target="_blank" rel="noopener">GitHub <span class="arrow" aria-hidden="true">&#8599;</span></a>
           </div>
-        </div>
-        <div class="hero-visual">
-          <div class="hero-frame">
-            <figure class="hero-photo">
-              <picture>
-                <source type="image/webp" srcset="images/profile-480.webp 480w, images/profile-640.webp 640w, images/profile-800.webp 800w" sizes="(min-width: 960px) min(40vw, 500px), min(calc(100vw - 2.5rem), 480px)">
-                <img src="images/profile.jpg" srcset="images/profile-480.jpg 480w, images/profile-640.jpg 640w, images/profile.jpg 800w" sizes="(min-width: 960px) min(40vw, 500px), min(calc(100vw - 2.5rem), 480px)" alt="Anirudh in a cap, hoodie and mirrored sunglasses, with mountains behind him at sunset" width="800" height="1000" fetchpriority="high">
-              </picture>
-            </figure>
+          <div class="hero-scope">
             <figure class="scope">
               <div class="scope-screen">
                 <canvas class="scope-canvas" role="img" aria-label="Simulated eye diagram of a high-speed serial link, drawn like an oscilloscope with persistence" aria-describedby="scope-note"></canvas>
@@ -95,8 +87,18 @@
                 <span class="scope-meas" hidden>Eye height <b data-eh></b> &middot; width <b data-ew></b></span>
               </figcaption>
             </figure>
+            <p class="scope-note" id="scope-note">A simulated eye diagram. New traces sweep in and older ones fade, as on a scope with persistence. A wide-open eye means a healthy link.<span class="hint" hidden> Point at it to add jitter.</span></p>
           </div>
-          <p class="scope-note" id="scope-note">The inset is a simulated eye diagram. New traces sweep in and older ones fade, as on a scope with persistence. A wide-open eye means a healthy link.<span class="hint" hidden> Point at it to add jitter.</span></p>
+        </div>
+        <div class="hero-visual">
+          <div class="hero-frame">
+            <figure class="hero-photo">
+              <picture>
+                <source type="image/webp" srcset="images/profile-480.webp 480w, images/profile-640.webp 640w, images/profile-800.webp 800w" sizes="(min-width: 960px) 800px, min(calc(100vw - 2.5rem), 480px)">
+                <img src="images/profile.jpg" srcset="images/profile-480.jpg 480w, images/profile-640.jpg 640w, images/profile.jpg 800w" sizes="(min-width: 960px) 800px, min(calc(100vw - 2.5rem), 480px)" alt="Anirudh in a cap, hoodie and mirrored sunglasses, with mountains behind him at sunset" width="800" height="1000" fetchpriority="high">
+              </picture>
+            </figure>
+          </div>
         </div>
       </div>
     </section>

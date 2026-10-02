@@ -25,19 +25,42 @@
   var nav = document.querySelector('.nav');
   var timeline = document.querySelector('.timeline');
   var hero = document.querySelector('.hero');
-  var heroParts = hero && {
-    visual: hero.querySelector('.hero-visual'),
-    img: hero.querySelector('.hero-photo img'),
-    text: hero.querySelector('.hero-text'),
-    scope: hero.querySelector('.scope')
-  };
-  var heroFallback = !!hero && !reduce && !cssView;
+  // Pinned hero stage: on wide, tall-enough screens the hero becomes a tall
+  // track (.pin in style.css) with a sticky stage. Scroll progress p (0..1)
+  // through that track drives the portrait: glide to centre and grow to fill
+  // the stage (0..0.55), hold (..0.72), then fade (..1). The text fades out
+  // first. Only transform and opacity are written.
+  var stage = hero && hero.querySelector('.wrap');
+  var frameEl = hero && hero.querySelector('.hero-frame');
+  var textEl = hero && hero.querySelector('.hero-text');
+  var pinned = false, trackTop = 0, trackLen = 1, dx = 0, dy = 0, grow = 1;
   var maxScroll = 1, heroStart = 0, heroEnd = 1, vh = window.innerHeight;
-  // Hero "exit" progress, matching CSS view() exit range: 0 while the hero is
-  // fully in view, 1 once its bottom edge has left the top of the viewport.
+  // Hero progress for the scope's jitter: 0 at rest, 1 once the hero is done.
   var heroExit = 0;
+  var navH = function () { return nav ? nav.getBoundingClientRect().height : 0; };
   var measure = function () {
     vh = window.innerHeight;
+    if (hero && stage && frameEl && textEl && !reduce) {
+      frameEl.style.transform = ''; frameEl.style.opacity = '';
+      textEl.style.transform = ''; textEl.style.opacity = '';
+      var want = window.innerWidth >= 960 && vh >= 600;
+      hero.classList.toggle('pin', want);
+      // the stage must hold the whole hero text, or pinning would hide some of it
+      if (want && textEl.getBoundingClientRect().height > vh - navH() - 24) { want = false; hero.classList.remove('pin'); }
+      pinned = want;
+      if (pinned) {
+        var hr = hero.getBoundingClientRect(), sr = stage.getBoundingClientRect(), fr = frameEl.getBoundingClientRect();
+        trackTop = hr.top + window.scrollY - navH();
+        trackLen = Math.max(1, hr.height - sr.height);
+        // where the portrait rests on the stage when the stage is pinned
+        var restTop = fr.top - sr.top, restCx = fr.left + fr.width / 2, restCy = restTop + fr.height / 2;
+        var pad = Math.max(16, sr.height * 0.035);
+        grow = Math.min((sr.height - 2 * pad) / fr.height, (window.innerWidth * 0.92) / fr.width, 1100 / fr.width);
+        grow = Math.max(1, grow);
+        dx = window.innerWidth / 2 - restCx;
+        dy = sr.height / 2 - restCy;
+      }
+    }
     maxScroll = Math.max(1, document.documentElement.scrollHeight - vh);
     if (hero) {
       var r = hero.getBoundingClientRect(), top = r.top + window.scrollY;
@@ -45,23 +68,26 @@
       heroEnd = top + r.height;
     }
   };
+  var smooth = function (t) { t = clamp(t, 0, 1); return t * t * (3 - 2 * t); };
   var ticking = false;
   var onFrame = function () {
     ticking = false;
     var y = window.scrollY;
     // reads first
     var tl = (!reduce && timeline) ? timeline.getBoundingClientRect() : null;
-    heroExit = clamp((y - heroStart) / Math.max(1, heroEnd - heroStart), 0, 1);
+    var p = pinned ? clamp((y - trackTop) / trackLen, 0, 1) : 0;
+    heroExit = pinned ? p : clamp((y - heroStart) / Math.max(1, heroEnd - heroStart), 0, 1);
     // then writes
     if (!cssScroll || reduce) bar.style.transform = 'scaleX(' + clamp(y / maxScroll, 0, 1) + ')';
     if (nav) nav.classList.toggle('scrolled', y > 8);
     if (tl) timeline.style.setProperty('--p', clamp((vh * 0.7 - tl.top) / tl.height, 0, 1).toFixed(4));
-    if (heroFallback) {
-      var p = heroExit;
-      if (heroParts.img) heroParts.img.style.transform = 'scale(' + (1 + 0.08 * p).toFixed(4) + ')';
-      if (heroParts.visual) heroParts.visual.style.opacity = (1 - clamp((p - 0.2) / 0.7, 0, 1)).toFixed(3);
-      if (heroParts.text) { heroParts.text.style.transform = 'translateY(' + (14 * p).toFixed(2) + 'vh)'; heroParts.text.style.opacity = (1 - 0.75 * p).toFixed(3); }
-      if (heroParts.scope) heroParts.scope.style.translate = '0 ' + (-10 * p).toFixed(2) + 'vh';
+    if (pinned) {
+      var g = smooth(p / 0.55), f = smooth((p - 0.72) / 0.28), t = smooth(p / 0.32);
+      frameEl.style.transform = 'translate3d(' + (dx * g).toFixed(1) + 'px,' + (dy * g - f * vh * 0.04).toFixed(1) + 'px,0) scale(' + (1 + (grow - 1) * g + 0.05 * f).toFixed(4) + ')';
+      frameEl.style.opacity = (1 - 0.6 * f).toFixed(3);
+      textEl.style.transform = 'translate3d(' + (-3 * t).toFixed(2) + 'vw,0,0) scale(' + (1 - 0.03 * t).toFixed(4) + ')';
+      textEl.style.opacity = (1 - t).toFixed(3);
+      textEl.style.visibility = t >= 1 ? 'hidden' : '';
     }
   };
   var request = function () { if (!ticking) { ticking = true; requestAnimationFrame(onFrame); } };

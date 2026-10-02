@@ -135,18 +135,18 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .hero-photo img { width: 100%; height: 100%; object-fit: contain; transform-origin: 50% 40%; }
 
 /* The scope: a canvas eye diagram over a static SVG fallback, so it is never empty.
-   It sits as an instrument inset over the lower-left of the portrait. */
+   It sits under the buttons as a small instrument, with its caption beside it. */
+.hero-scope { display: flex; align-items: center; gap: 1.25rem; margin-top: 2.25rem; }
 .scope {
-  position: absolute; z-index: 2; margin: 0; left: .6rem; bottom: -1.5rem; width: 58%;
+  position: relative; flex: none; margin: 0; width: clamp(190px, 17vw, 250px);
   padding: .45rem .45rem .35rem; border-radius: calc(var(--radius) + 2px);
   background: rgba(12, 13, 16, .86); border: 1px solid var(--line-strong);
   -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
   box-shadow: 0 24px 50px -20px rgba(0,0,0,.85), 0 0 0 1px rgba(0,0,0,.4);
   animation: rise 1s var(--ease) .2s backwards;
 }
-@media (min-width: 960px) { .scope { left: -16%; width: 58%; bottom: -2rem; } }
 .scope-screen {
-  position: relative; aspect-ratio: 4 / 3; border-radius: var(--radius); overflow: hidden;
+  position: relative; aspect-ratio: 16 / 10; border-radius: var(--radius); overflow: hidden;
   border: 1px solid var(--line-strong);
   background:
     url("images/eye-fallback.svg") center / 100% 100% no-repeat,
@@ -171,8 +171,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 }
 .scope-readout { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0 .75rem; padding: .4rem .2rem 0; font-family: var(--mono); font-size: .66rem; line-height: 1.5; color: var(--muted); letter-spacing: .03em; }
 .scope-meas b { color: var(--accent); font-weight: 500; font-variant-numeric: tabular-nums; }
-.scope-note { margin: 2.6rem 0 0; font-size: .82rem; line-height: 1.5; color: var(--faint); max-width: 40ch; }
-@media (min-width: 960px) { .scope-note { margin-top: 2.9rem; padding-left: 44%; max-width: none; } }
+.scope-note { margin: 0; font-size: .8rem; line-height: 1.5; color: var(--faint); max-width: 30ch; }
 .scope-note .hint { color: var(--muted); }
 
 /* Owner placeholders: impossible to mistake for real content */
@@ -581,13 +580,9 @@ body::after {
     .nav::before { transition: none; animation: nav-glass linear both; animation-timeline: scroll(root block); animation-range: 0 40vh; }
   }
   @supports ((animation-timeline: view()) and (animation-range: exit)) {
-    .hero { view-timeline: --hero block; }
-    /* the portrait grows a little and the whole visual fades as the hero leaves */
-    .hero-photo img { animation: hero-zoom linear both; animation-timeline: --hero; animation-range: exit 0% exit 100%; }
-    .hero-visual { animation: hero-fade linear both; animation-timeline: --hero; animation-range: exit 20% exit 90%; }
-    /* depth: text lags behind the scroll, the scope inset runs ahead of it */
-    .hero-text { animation: hero-lag linear both; animation-timeline: --hero; animation-range: exit 0% exit 100%; }
-    .scope { animation: rise 1s var(--ease) .2s backwards, hero-lead linear both; animation-timeline: auto, --hero; animation-range: normal, exit 0% exit 100%; }
+    /* phones and short screens (no pinned stage): the portrait settles in, then fades as the hero leaves */
+    .hero:not(.pin) .hero-visual { view-timeline: --portrait block; }
+    .hero:not(.pin) .hero-frame { animation: portrait-in linear both, portrait-out linear both; animation-timeline: --portrait, --portrait; animation-range: entry 10% cover 45%, exit 10% exit 100%; }
 
     /* sections and roles ease in as they enter, then sit still */
     .reveal > .section-grid, .role, .feature, .mosaic {
@@ -597,10 +592,8 @@ body::after {
 }
 @keyframes progress-grow { to { transform: scaleX(1); } }
 @keyframes nav-glass { from { opacity: 0; } to { opacity: 1; } }
-@keyframes hero-zoom { to { scale: 1.08; } }
-@keyframes hero-fade { to { opacity: 0; } }
-@keyframes hero-lag { to { translate: 0 14vh; opacity: .25; } }
-@keyframes hero-lead { to { translate: 0 -10vh; } }
+@keyframes portrait-in { from { scale: .86; opacity: .4; } }
+@keyframes portrait-out { to { scale: 1.12; opacity: 0; } }
 @keyframes settle { from { opacity: 0; translate: 0 2.25rem; } }
 
 /* Cross-page transitions between the home page and project pages */
@@ -676,7 +669,9 @@ body::after {
   .hero-text .cta { order: 3; margin: 0 0 2.25rem; }
   .hero-visual { order: 4; margin-bottom: 2.25rem; }
   .hero-text .pitch { order: 5; margin: 0; }
+  .hero-scope { order: 6; margin-top: 2rem; }
 }
+@media (max-width: 479px) { .hero-scope { flex-direction: column; align-items: flex-start; } .scope { width: 100%; max-width: 320px; } }
 @media (max-width: 599px) {
   .hero-text .cta { gap: .5rem; }
   .hero-text .pitch { font-size: var(--fs-base); }
@@ -706,3 +701,28 @@ body::after {
 .notfound h1 { font-size: clamp(2.2rem, 1.4rem + 4vw, 3.6rem); letter-spacing: -0.035em; max-width: 16ch; }
 .notfound p { color: var(--muted); max-width: 34rem; margin-top: 1rem; }
 .notfound pre { font-family: var(--mono); font-size: .78rem; color: var(--muted); background: var(--bg-elev); border: 1px solid var(--line); border-radius: var(--radius); padding: 1rem 1.1rem; overflow-x: auto; max-width: 34rem; margin: 1.5rem 0 0; }
+
+/* ---------- Pinned hero stage (script.js adds .pin on wide, tall-enough screens) ----------
+   The hero becomes a tall track with a sticky, one-screen stage inside it.
+   Scrolling through the track glides the portrait to the centre and grows it
+   to fill the screen (whole photo, never cropped), holds, then fades it out
+   as the next section arrives. script.js writes only transform and opacity.
+   Without JS, or with reduced motion, there is no .pin and no track. */
+.hero.pin { height: 250vh; padding: 0; }
+.hero.pin > .wrap {
+  position: sticky; top: var(--nav-h);
+  height: calc(100vh - var(--nav-h)); height: calc(100svh - var(--nav-h));
+  align-content: center;
+}
+.hero.pin .hero-visual { position: relative; z-index: 3; }
+.hero.pin .hero-frame { will-change: transform, opacity; transform-origin: 50% 50%; }
+.hero.pin .hero-text { will-change: transform, opacity; }
+.hero.pin::after { display: none; }
+@media (min-width: 960px) and (max-height: 860px) {
+  .hero .status { margin-bottom: .9rem; }
+  .hero-line { margin: 1rem 0 1.1rem; }
+  .cta { margin-top: 1.4rem; }
+  .hero-scope { margin-top: 1.4rem; }
+  .scope { width: 170px; }
+  .scope-readout .scope-meas { display: none; }
+}
