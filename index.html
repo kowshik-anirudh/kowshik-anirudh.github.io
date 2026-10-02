@@ -45,6 +45,7 @@
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
+  <div class="progress" aria-hidden="true"></div>
 
   <header class="nav">
     <div class="wrap nav-inner">
@@ -66,10 +67,7 @@
     <section class="hero" id="top" aria-labelledby="hero-name">
       <div class="wrap hero-grid">
         <div class="hero-text">
-          <div class="id-row">
-            <img class="avatar" src="images/avatar-144.jpg" srcset="images/avatar-144.jpg 144w, images/avatar-216.jpg 216w" sizes="(min-width: 880px) 72px, 60px" alt="Anirudh in a cap and sunglasses, with mountains behind him at sunset" width="144" height="144" decoding="async" onerror="this.remove()">
-            <p class="status"><span>Systems Validation Engineer</span> <span>Quanta Manufacturing <span class="sep" aria-hidden="true">&middot;</span> San Francisco Bay Area</span></p>
-          </div>
+          <p class="status"><span>Systems Validation Engineer</span> <span>Quanta Manufacturing <span class="sep" aria-hidden="true">&middot;</span> San Francisco Bay Area</span></p>
           <h1 id="hero-name">Anirudh Kowshik</h1>
           <p class="hero-line">I try to break AI server racks on purpose, <em>so they don't break by accident.</em></p>
           <p class="pitch">At Quanta I've taken <strong>next-generation rack-scale AI systems</strong> and <strong>OCP server platforms</strong> through NPI toward mass production. Before that, I ran production Kubernetes clusters, built data pipelines and shipped an LLM assistant, so when a problem crosses from hardware into software, I can trace it end to end.</p>
@@ -80,16 +78,26 @@
             <a class="btn" href="https://github.com/kowshik-anirudh" target="_blank" rel="noopener">GitHub <span class="arrow" aria-hidden="true">&#8599;</span></a>
           </div>
         </div>
-        <figure class="scope">
-          <div class="scope-screen">
-            <canvas class="scope-canvas" role="img" aria-label="Simulated eye diagram of a high-speed serial link, drawn like an oscilloscope with persistence"></canvas>
+        <div class="hero-visual">
+          <div class="hero-frame">
+            <figure class="hero-photo">
+              <picture>
+                <source type="image/webp" srcset="images/profile-480.webp 480w, images/profile-640.webp 640w, images/profile-800.webp 800w" sizes="(min-width: 960px) min(40vw, 500px), min(calc(100vw - 2.5rem), 480px)">
+                <img src="images/profile.jpg" srcset="images/profile-480.jpg 480w, images/profile-640.jpg 640w, images/profile.jpg 800w" sizes="(min-width: 960px) min(40vw, 500px), min(calc(100vw - 2.5rem), 480px)" alt="Anirudh in a cap, hoodie and mirrored sunglasses, with mountains behind him at sunset" width="800" height="1000" fetchpriority="high">
+              </picture>
+            </figure>
+            <figure class="scope">
+              <div class="scope-screen">
+                <canvas class="scope-canvas" role="img" aria-label="Simulated eye diagram of a high-speed serial link, drawn like an oscilloscope with persistence" aria-describedby="scope-note"></canvas>
+              </div>
+              <figcaption class="scope-readout">
+                <span>PRBS7 &middot; NRZ &middot; simulated</span>
+                <span class="scope-meas" hidden>Eye height <b data-eh></b> &middot; width <b data-ew></b></span>
+              </figcaption>
+            </figure>
           </div>
-          <div class="scope-readout" aria-hidden="true">
-            <span>PRBS7 &middot; NRZ &middot; simulated</span>
-            <span class="scope-meas" hidden>Eye height <b data-eh></b> &middot; width <b data-ew></b></span>
-          </div>
-          <figcaption>A simulated eye diagram. New traces sweep in and older ones fade, as they do on a scope with persistence. A wide-open eye means a healthy link.<span class="hint" hidden> Point at it to add jitter.</span></figcaption>
-        </figure>
+          <p class="scope-note" id="scope-note">The inset is a simulated eye diagram. New traces sweep in and older ones fade, as on a scope with persistence. A wide-open eye means a healthy link.<span class="hint" hidden> Point at it to add jitter.</span></p>
+        </div>
       </div>
     </section>
 

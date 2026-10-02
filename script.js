@@ -8,27 +8,61 @@
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var hasIO = 'IntersectionObserver' in window;
   var clamp = function (v, a, b) { return v < a ? a : v > b ? b : v; };
+  var supports = function (q) { try { return !!(window.CSS && CSS.supports && CSS.supports(q)); } catch (e) { return false; } };
+  // Native scroll-driven animations do the scroll work in style.css; these
+  // flags decide which small JS fallbacks are still needed.
+  var cssScroll = supports('(animation-timeline: scroll()) and (animation-range: 0% 100%)');
+  var cssView = supports('(animation-timeline: view()) and (animation-range: exit)');
 
-  // ---------- Scroll progress line + nav state (one rAF-throttled scroll handler) ----------
-  var bar = document.createElement('div');
-  bar.className = 'progress';
-  bar.setAttribute('aria-hidden', 'true');
-  document.body.appendChild(bar);
+  // ---------- Scroll progress line, nav state, hero depth (one rAF-throttled scroll handler) ----------
+  var bar = document.querySelector('.progress');
+  if (!bar) {
+    bar = document.createElement('div');
+    bar.className = 'progress';
+    bar.setAttribute('aria-hidden', 'true');
+    document.body.insertBefore(bar, document.body.firstChild);
+  }
   var nav = document.querySelector('.nav');
   var timeline = document.querySelector('.timeline');
-  var maxScroll = 1;
-  var measure = function () { maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight); };
+  var hero = document.querySelector('.hero');
+  var heroParts = hero && {
+    visual: hero.querySelector('.hero-visual'),
+    img: hero.querySelector('.hero-photo img'),
+    text: hero.querySelector('.hero-text'),
+    scope: hero.querySelector('.scope')
+  };
+  var heroFallback = !!hero && !reduce && !cssView;
+  var maxScroll = 1, heroStart = 0, heroEnd = 1, vh = window.innerHeight;
+  // Hero "exit" progress, matching CSS view() exit range: 0 while the hero is
+  // fully in view, 1 once its bottom edge has left the top of the viewport.
+  var heroExit = 0;
+  var measure = function () {
+    vh = window.innerHeight;
+    maxScroll = Math.max(1, document.documentElement.scrollHeight - vh);
+    if (hero) {
+      var r = hero.getBoundingClientRect(), top = r.top + window.scrollY;
+      heroStart = top + Math.max(0, r.height - vh);
+      heroEnd = top + r.height;
+    }
+  };
   var ticking = false;
   var onFrame = function () {
     ticking = false;
     var y = window.scrollY;
     // reads first
     var tl = (!reduce && timeline) ? timeline.getBoundingClientRect() : null;
-    var vh = window.innerHeight;
+    heroExit = clamp((y - heroStart) / Math.max(1, heroEnd - heroStart), 0, 1);
     // then writes
-    bar.style.transform = 'scaleX(' + clamp(y / maxScroll, 0, 1) + ')';
+    if (!cssScroll || reduce) bar.style.transform = 'scaleX(' + clamp(y / maxScroll, 0, 1) + ')';
     if (nav) nav.classList.toggle('scrolled', y > 8);
     if (tl) timeline.style.setProperty('--p', clamp((vh * 0.7 - tl.top) / tl.height, 0, 1).toFixed(4));
+    if (heroFallback) {
+      var p = heroExit;
+      if (heroParts.img) heroParts.img.style.transform = 'scale(' + (1 + 0.08 * p).toFixed(4) + ')';
+      if (heroParts.visual) heroParts.visual.style.opacity = (1 - clamp((p - 0.2) / 0.7, 0, 1)).toFixed(3);
+      if (heroParts.text) { heroParts.text.style.transform = 'translateY(' + (14 * p).toFixed(2) + 'vh)'; heroParts.text.style.opacity = (1 - 0.75 * p).toFixed(3); }
+      if (heroParts.scope) heroParts.scope.style.translate = '0 ' + (-10 * p).toFixed(2) + 'vh';
+    }
   };
   var request = function () { if (!ticking) { ticking = true; requestAnimationFrame(onFrame); } };
   window.addEventListener('scroll', request, { passive: true });
@@ -69,12 +103,12 @@
     var meas = fig.querySelector('.scope-meas');
     var ehEl = fig.querySelector('[data-eh]');
     var ewEl = fig.querySelector('[data-ew]');
-    var hint = fig.querySelector('.hint');
+    var hint = document.querySelector('.scope-note .hint') || fig.querySelector('.hint');
 
     var W = 0, H = 0, dpr = 1;
     var NOISE = [0.035, 0.11];   // amplitude noise (fraction of swing), calm -> jittery
     var JIT = [0.03, 0.13];      // timing jitter (fraction of a unit interval)
-    var heat = 0, heatTarget = 0, scrollHeat = 0;
+    var heat = 0, heatTarget = 0;
 
     // PRBS7 (x^7 + x^6 + 1)
     var lfsr = 0x5a;
@@ -173,7 +207,7 @@
       var dt = last ? Math.min(now - last, 64) : 16;
       last = now;
       if (!fig.classList.contains('live')) paint();
-      heat += (Math.max(heatTarget, scrollHeat) - heat) * 0.06;
+      heat += (Math.max(heatTarget, heroExit * 0.9) - heat) * 0.06; // a little more jitter as it leaves view
       // Persistence: fade what is already on screen in fixed 50 ms steps.
       // Tiny per-frame fades (high-refresh panels) round to zero in an 8-bit
       // canvas and leave grey ghosts, so the step is the same at 60 or 165 Hz.
@@ -233,22 +267,26 @@
 
   if (reduce || !hasIO) return; // final state is the default state
 
-  // ---------- Arrivals: sections and roles fade up as they scroll in ----------
-  // Anything already on screen is marked as arrived *before* .motion is added,
-  // so content that is visible never disappears.
+  // ---------- Arrivals ----------
+  // The rack panel's power-on sequence always uses IntersectionObserver.
+  // Sections and roles use CSS view() timelines where supported, and fall
+  // back to this observer (.io-reveal) where not. Anything already on screen
+  // is marked as arrived *before* the classes are added, so content that is
+  // visible never disappears.
   var arrive = function (el) { el.classList.add(el.classList.contains('stack') ? 'on' : 'in'); };
   var io = new IntersectionObserver(function (entries) {
     entries.forEach(function (e) {
       if (e.isIntersecting) { arrive(e.target); io.unobserve(e.target); }
     });
   }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
-  var vh = window.innerHeight;
-  var targets = Array.prototype.slice.call(document.querySelectorAll('.reveal, .role, .stack'));
+  vh = window.innerHeight;
+  var targets = Array.prototype.slice.call(document.querySelectorAll(cssView ? '.stack' : '.reveal, .role, .stack'));
   var rects = targets.map(function (el) { return el.getBoundingClientRect(); });
   targets.forEach(function (el, i) {
     if (rects[i].top < vh && rects[i].bottom > 0) arrive(el); else io.observe(el);
   });
   root.classList.add('motion');
+  if (!cssView) root.classList.add('io-reveal');
 
   // ---------- Pause looping animations while off screen ----------
   var pauser = new IntersectionObserver(function (entries) {

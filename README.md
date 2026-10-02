@@ -7,7 +7,7 @@ website/
   index.html        home page (hero, about, experience, skills, projects, reading, off the clock, contact)
   projects/*.html   case studies and the rack-validation method page (share style.css)
   style.css         dark theme, layout, motion (respects prefers-reduced-motion)
-  script.js         hero scope canvas, scroll reveal, nav highlight (optional; the page works without it)
+  script.js         hero scope canvas, nav highlight, fallbacks for scroll effects (optional; the page works without it)
   favicon.svg       eye-diagram favicon
   404.html          custom not-found page (root-absolute paths; assumes the user site at /)
   robots.txt, sitemap.xml  crawler hints; add new pages to sitemap.xml
@@ -17,7 +17,11 @@ website/
 
 ## Design notes
 
-- The hero has a small **oscilloscope**: a `<canvas>` that draws a simulated PRBS7 eye diagram with persistence (`script.js`). It only animates while it is on screen and the tab is visible, and shows a single static frame under `prefers-reduced-motion`. Pointing at it (or tapping it on touch screens) adds jitter, and the eye-height/width readout is measured from the traces actually drawn. Without JS, a static SVG eye (`images/eye-fallback.svg`) shows instead, so the box is never empty.
+- The hero line is "I try to break AI server racks on purpose, so they don't break by accident." It also appears in `og:description`; change both together.
+- The hero is led by the full, uncropped portrait (`images/profile-{480,640,800}.webp` with `profile-480.jpg`, `profile-640.jpg` and `profile.jpg` as the JPEG fallback). It is the LCP element, so it has `fetchpriority="high"` and is never lazy-loaded. The sizes were made from `profile.jpg` with Pillow; the source is 800x1000, so nothing larger is generated.
+- An **oscilloscope** inset sits over the lower-left of the portrait: a `<canvas>` that draws a simulated PRBS7 eye diagram with persistence (`script.js`). It only animates while it is on screen and the tab is visible, and shows a single static frame under `prefers-reduced-motion`. Pointing at it (or tapping it on touch screens) adds jitter, it gets a little more jittery as it scrolls away, and the eye-height/width readout is measured from the traces actually drawn. Without JS, or if the GPU drops the canvas, a static SVG eye (`images/eye-fallback.svg`) shows instead, so the box is never empty.
+- **Scroll motion** is native CSS scroll-driven animation (`animation-timeline: scroll()` / `view()`, Chrome/Edge 115+, Safari 26+): a thin progress line, a nav whose glass firms up as you leave the top, the portrait growing slightly and fading as the hero leaves while the text lags and the scope runs ahead, and sections easing in as they enter. Only `translate`, `scale`, `transform` and `opacity` animate. Browsers without support get a small rAF fallback from `script.js`; `prefers-reduced-motion: reduce` turns all of it off. Page-to-page navigation uses a short cross-document view transition (`@view-transition`).
+- **Cache busting:** every page loads `style.css?v=YYYYMMDD` and `script.js?v=YYYYMMDD`. GitHub Pages caches assets for about 10 minutes, so **bump the date on every page whenever you change `style.css` or `script.js`**, or a visitor can get new HTML with an old stylesheet.
 - Fonts: Bricolage Grotesque (display headings) with IBM Plex Sans and IBM Plex Mono (body and labels), from Google Fonts. Every page loads the same font URL.
 - Placeholders the owner still has to fill in are marked `[TODO Tn: ...]` in text (styled with a dashed amber outline by `.todo`) and `TODO-Tn` in attributes. Search for `TODO` to find them all.
 - The About section's "stack" panel is styled as a 6U rack: lit units are where he works today.
@@ -25,7 +29,7 @@ website/
 
 ## Photos
 
-Photos live in `images/` (`profile.jpg`, `education.jpg`, `hiking.jpg`, `techno.jpg`, `travel.jpg`, `food.jpg`). To replace one, keep the filename.
+Photos live in `images/` (`profile.jpg` plus its resized copies, `education.jpg`, `hiking.jpg`, `techno.jpg`, `travel.jpg`, `food.jpg`). To replace one, keep the filename.
 
 - **Compress each photo to under ~300 KB** (Squoosh, MozJPEG quality ~70, or `magick in.jpg -resize 800x1000^ -gravity center -extent 800x1000 -quality 72 -strip out.jpg`).
 - Strip location metadata (EXIF/GPS); `-strip` does this.
