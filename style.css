@@ -544,3 +544,6 @@ body::after {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+
+/* Impact pill holding a placeholder may wrap on small screens */
+.impact:has(.todo) { white-space: normal; }

@@ -131,15 +131,14 @@
                 <span class="role-where">Fremont, CA</span>
               </div>
               <div>
-                <div class="role-head"><h3>Systems Validation Engineer</h3><span class="impact"><b>L10&ndash;L12</b> rack bring-up</span></div>
-                <p class="headline">Took NVIDIA GB300 and VR200 AI racks and Meta OCP server platforms through NPI toward mass production, gating each build with test plans, firmware validation and failure debug, and driving fixes back to hardware and firmware teams.</p>
+                <div class="role-head"><h3>Systems Validation Engineer</h3><span class="impact"><span class="todo" data-todo="T8">[TODO T8: headline outcome, e.g. &ldquo;N racks to MP&rdquo;]</span></span></div>
+                <p class="headline">Took NVIDIA GB300 and VR200 AI racks and Meta OCP server platforms <span class="todo" data-todo="T9">[TODO T9: confirm these customer and program names are cleared to publish]</span> through NPI toward mass production, gating each build with test plans, firmware validation and failure debug, and driving fixes back to hardware and firmware teams.</p>
                 <ul>
-                  <li><b>Rack bring-up.</b> Validated custom ASIC-based racks through every development phase (EVT, DVT, PVT) up to mass production, using PXE network boot to provision multi-host test environments for L10&ndash;L12 rack bring-up.</li>
-                  <li><b>RDMA/RoCE networking.</b> Verified RDMA/RoCE across NICs, network modules and the full rack topology on every build, catching link, connectivity and configuration failures at rack level before they could reach production AI clusters.</li>
-                  <li><b>NVLink fabric.</b> Debugged NVLink switch fabric issues with NVIDIA Fabric Manager, tracing GPUs that failed to join the fabric back to link, firmware or configuration faults, so each rack came up with every GPU on the NVLink fabric.</li>
-                  <li><b>Signal integrity.</b> Isolated PCIe, NIC, NVMe and retimer link failures with PRBS/SerDes testing, root-causing issues across hardware, firmware and test infrastructure so fixes landed in the next board rev or firmware RC.</li>
-                  <li><b>BMC firmware.</b> Hardened BMC firmware across release candidates by validating Redfish, IPMI, SOL and out-of-band management end to end, including sensors, telemetry and BMC&ndash;BIOS/CPLD/BIC interactions on production-intent hardware.</li>
-                  <li><b>Test automation.</b> Replaced repetitive manual checks with Python/Bash automation, a hardened Python/YAML test framework and log-parsing tooling, making rack-level validation results repeatable across builds and cutting manual test effort.</li>
+                  <li><b>Rack bring-up.</b> Validated <span class="todo" data-todo="T1">[TODO T1: number of racks or nodes]</span> custom ASIC-based racks through every development phase (EVT, DVT, PVT) up to mass production, across <span class="todo" data-todo="T2">[TODO T2: number of builds or phases gated]</span>, by using PXE network boot to provision multi-host test environments for L10&ndash;L12 rack bring-up.</li>
+                  <li><b>GPU and network fabrics.</b> Caught link, connectivity and configuration failures at rack level before they could reach production AI clusters (<span class="todo" data-todo="T3">[TODO T3: issues caught before MP]</span>), by verifying RDMA/RoCE across NICs, network modules and the full rack topology on every build, and by debugging NVLink switch fabric issues with NVIDIA Fabric Manager, tracing GPUs that failed to join the fabric back to link, firmware or configuration faults, so each rack came up with every GPU (<span class="todo" data-todo="T4">[TODO T4: GPUs per rack or NVLink domain]</span>) on the NVLink fabric.</li>
+                  <li><b>Test automation.</b> Cut manual test effort by <span class="todo" data-todo="T5">[TODO T5: % of manual checks automated, or hours saved per build]</span> by replacing repetitive manual checks with Python/Bash automation, a hardened Python/YAML test framework and log-parsing tooling, which made rack-level validation results repeatable across builds.</li>
+                  <li><b>Signal integrity.</b> Root-caused <span class="todo" data-todo="T6">[TODO T6: number of link failures root-caused]</span> PCIe, NIC, NVMe and retimer link failures across hardware, firmware and test infrastructure, isolating them with PRBS/SerDes testing so fixes landed in the next board rev or firmware RC.</li>
+                  <li><b>BMC firmware.</b> Hardened BMC firmware across <span class="todo" data-todo="T7">[TODO T7: number of BMC firmware RCs validated]</span> release candidates by validating Redfish, IPMI, SOL and out-of-band management end to end, including sensors, telemetry and BMC&ndash;BIOS/CPLD/BIC interactions on production-intent hardware.</li>
                 </ul>
                 <ul class="tags" aria-label="Tools"><li>NVIDIA Fabric Manager</li><li>RDMA/RoCE</li><li>PRBS/SerDes</li><li>PCIe</li><li>NVMe</li><li>Redfish</li><li>IPMI</li><li>PXE</li><li>Python</li><li>Bash</li></ul>
               </div>
@@ -222,7 +221,7 @@
           <dl class="skills">
             <div class="skill-group primary">
               <dt>AI hardware &amp; validation</dt>
-              <dd><ul><li>NVIDIA GB300/VR200 racks</li><li>OCP servers</li><li>NPI (EVT/DVT/PVT)</li><li>ASIC-based rack validation</li><li>L10&ndash;L12 bring-up</li><li>PXE</li><li>PRBS/SerDes</li><li>PCIe</li><li>NVMe</li><li>BIOS</li><li>CPLD</li><li>BMC (Redfish, IPMI, SOL)</li></ul></dd>
+              <dd><ul><li>NVIDIA GB300/VR200 racks <span class="todo" data-todo="T9">[TODO T9]</span></li><li>OCP servers</li><li>NPI (EVT/DVT/PVT)</li><li>ASIC-based rack validation</li><li>L10&ndash;L12 bring-up</li><li>PXE</li><li>PRBS/SerDes</li><li>PCIe</li><li>NVMe</li><li>BIOS</li><li>CPLD</li><li>BMC (Redfish, IPMI, SOL)</li></ul></dd>
             </div>
             <div class="skill-group primary">
               <dt>Networking</dt>
