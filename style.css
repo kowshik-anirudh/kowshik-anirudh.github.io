@@ -587,3 +587,12 @@ body::after {
 .share > div { padding: 1rem 1.1rem; border: 1px solid var(--line); border-radius: var(--radius); }
 .share h3 { font-family: var(--mono); font-size: var(--fs-xs); font-weight: 500; text-transform: uppercase; letter-spacing: .08em; color: var(--accent); margin-bottom: .6rem; }
 .share ul.points { gap: .45rem; }
+
+/* Small screens: name, role, hero line and the ways to reach him come before the pitch */
+@media (max-width: 599px) {
+  .hero-text { display: flex; flex-direction: column; }
+  .hero-text .cta { order: 3; margin: 0 0 1.5rem; gap: .5rem; }
+  .hero-text .pitch { order: 4; font-size: var(--fs-base); }
+  .hero-line { margin: 1rem 0 1.25rem; }
+  .btn { min-height: 44px; padding: 0 1.1rem; }
+}
