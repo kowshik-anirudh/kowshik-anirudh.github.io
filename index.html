@@ -40,9 +40,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20261003b">
-  <script defer src="script.js?v=20261003b"></script>
-  <script defer src="line.js?v=20261003b"></script>
+  <link rel="stylesheet" href="style.css?v=20261003c">
+  <script defer src="script.js?v=20261003c"></script>
+  <script defer src="line.js?v=20261003c"></script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -117,10 +117,12 @@
       <div class="section-grid">
         <header class="sec-head"><h2 id="line-h">Here's what I do</h2></header>
         <div>
+          <div class="line-intro">
           <p class="sec-line">A rack ships only after it has <em>passed every station on the test line.</em></p>
           <div class="prose">
             <p>This is that line, station by station: what each one checks, what &ldquo;pass&rdquo; means, and the failures it exists to catch.</p>
             <p class="line-hint" hidden>Select a station to see what it does, or run the whole line. Turn on <strong>Show a failure</strong> to watch what happens when a rack fails partway through.</p>
+          </div>
           </div>
 
           <div class="line" data-line>
@@ -190,8 +192,11 @@
             </section>
           </div>
 
+          <div class="story-wrap">
+          <div class="story-head">
           <h3 class="sub">A failure, walked through</h3>
           <p class="story-intro">A representative example of the kind of failure the line exists for. It&rsquo;s built from the class of problem, not from one program&rsquo;s details.</p>
+          </div>
           <ol class="story">
             <li><strong>Symptom</strong><span>At the network blade station, one GPU on a few racks fails to join the fabric after a cold boot. A warm reboot sometimes fixes it, which is the worst kind of failure: it passes a quick re-test.</span></li>
             <li><strong>Hypotheses</strong><span>A marginal link on that GPU&rsquo;s path through the cable cartridge, a firmware race at power-on between the BMC, CPLD and GPU baseboard, or a stale fabric configuration left on the node.</span></li>
@@ -200,6 +205,7 @@
             <li><strong>Fix</strong><span>The timing fix goes to the firmware team for the next release candidate, with reproduction steps and logs attached, and is verified on the next build.</span></li>
             <li><strong>Prevention</strong><span>A cold-boot loop that checks every GPU has joined the fabric is added to the automated suite, so a regression shows up on the first rack of the next build.</span></li>
           </ol>
+          </div>
           <div class="links">
             <a href="projects/rack-validation-method.html">Read the full method: why a test line, why the order matters, where automation fits <span class="arrow" aria-hidden="true">&rarr;</span></a>
           </div>
