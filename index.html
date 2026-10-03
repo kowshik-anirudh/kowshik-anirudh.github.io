@@ -40,8 +40,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20261003">
-  <script defer src="script.js?v=20261003"></script>
+  <link rel="stylesheet" href="style.css?v=20261003b">
+  <script defer src="script.js?v=20261003b"></script>
+  <script defer src="line.js?v=20261003b"></script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -52,6 +53,7 @@
       <a class="brand" href="#top" aria-label="Anirudh Kowshik, back to top"><span class="led" aria-hidden="true"></span>AK</a>
       <nav aria-label="Primary">
         <ul>
+          <li class="nav-line"><a href="#test-line">Test line</a></li>
           <li><a href="#about">About</a></li>
           <li><a href="#experience">Experience</a></li>
           <li><a href="#projects">Projects</a></li>
@@ -70,13 +72,20 @@
           <p class="status"><span>Systems Validation Engineer</span> <span>Quanta Manufacturing <span class="sep" aria-hidden="true">&middot;</span> San Francisco Bay Area</span></p>
           <h1 id="hero-name">Anirudh Kowshik</h1>
           <p class="hero-line">I try to break AI server racks on purpose, <em>so they don't break by accident.</em></p>
-          <p class="pitch">At Quanta I've taken <strong>next-generation rack-scale AI systems</strong> and <strong>OCP server platforms</strong> through NPI toward mass production. Before that, I ran production Kubernetes clusters, built data pipelines and shipped an LLM assistant, so when a problem crosses from hardware into software, I can trace it end to end.</p>
+          <p class="pitch">At Quanta I've taken <strong>next-generation rack-scale AI systems</strong> and <strong>OCP server platforms</strong> through NPI toward mass production. I came to hardware through software, so I can trace a failure across both.</p>
           <div class="cta">
             <a class="btn btn-primary" href="https://www.linkedin.com/in/anirudh-kowshik262026" target="_blank" rel="noopener">LinkedIn <span class="arrow" aria-hidden="true">&#8599;</span></a>
             <a class="btn" href="resume.pdf">R&eacute;sum&eacute; (PDF)</a>
             <a class="btn" href="mailto:i.anirudh.kowshik@gmail.com">Email</a>
             <a class="btn" href="https://github.com/kowshik-anirudh" target="_blank" rel="noopener">GitHub <span class="arrow" aria-hidden="true">&#8599;</span></a>
           </div>
+          <a class="teaser" href="#test-line">
+            <span class="teaser-strip" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b class="teaser-at"></b></span>
+            <span class="teaser-text">
+              <span class="teaser-cue">Watch a rack go through the test line <span class="arrow" aria-hidden="true">&darr;</span></span>
+              <span class="teaser-note">Network blade: 71/72 GPUs joined</span>
+            </span>
+          </a>
           <div class="hero-scope">
             <figure class="scope">
               <div class="scope-screen">
@@ -98,6 +107,101 @@
                 <img src="images/profile.jpg" srcset="images/profile-480.jpg 480w, images/profile-640.jpg 640w, images/profile.jpg 800w" sizes="(min-width: 960px) 800px, min(calc(100vw - 2.5rem), 480px)" alt="Anirudh in a cap, hoodie and mirrored sunglasses, with mountains behind him at sunset" width="800" height="1000" fetchpriority="high">
               </picture>
             </figure>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Here's what I do: the test line -->
+    <section class="section wrap reveal" id="test-line" aria-labelledby="line-h">
+      <div class="section-grid">
+        <header class="sec-head"><h2 id="line-h">Here's what I do</h2></header>
+        <div>
+          <p class="sec-line">A rack ships only after it has <em>passed every station on the test line.</em></p>
+          <div class="prose">
+            <p>This is that line, station by station: what each one checks, what &ldquo;pass&rdquo; means, and the failures it exists to catch.</p>
+            <p class="line-hint" hidden>Select a station to see what it does, or run the whole line. Turn on <strong>Show a failure</strong> to watch what happens when a rack fails partway through.</p>
+          </div>
+
+          <div class="line" data-line>
+            <section class="stage" id="st-pxe" data-short="PXE boot" data-log="pxe: 18/18 blades found the provisioning server|os: test image downloaded to 18/18 blades|os: booted, version and checksum match|PASS  every blade running the expected image">
+              <h3>PXE boot <small>Boot every blade from the network</small></h3>
+              <p>Before any test runs, every compute blade boots over the network. It pulls the test operating system from a provisioning server, boots it, and checks in. Nothing is installed by hand, so every rack starts from the same known image.</p>
+              <div class="stage-cols">
+                <div><h4>What it checks</h4><ul class="checks"><li>Every blade network-boots and finds the provisioning server</li><li>The test OS image downloads</li><li>The OS boots, and its version and checksum are checked</li></ul></div>
+                <div><h4>Pass means</h4><p>Every blade in the rack is running the expected image and answering.</p><h4>What it catches</h4><p>A wrong boot order, a dead network port, a blade that never shows up.</p></div>
+              </div>
+            </section>
+
+            <section class="stage" id="st-pretest" data-short="Pretest" data-log="firmware: bios, bmc, cpld, nic, gpu flashed to build set|cpu: every socket present, cores and clocks at spec|memory: every dimm present, size and speed correct|pcie: every link trained at expected width and speed|ssd: every drive present, health check clean|gpu/asic: all present, links up, firmware correct|buses: every device answered on its data bus|sensors: every sensor reading, 0 out of range|PASS  component level clean on 18/18 blades">
+              <h3>Pretest <small>Check every part on every compute blade</small></h3>
+              <p>Component-level testing on each compute blade. Firmware is flashed to the versions this build is meant to run, then every part is checked on its own: CPUs, memory, PCIe links, SSDs, GPUs and other ASICs, the data buses that connect them, and the sensors that watch them.</p>
+              <div class="stage-cols">
+                <div><h4>What it checks</h4><ul class="checks"><li>Firmware flashed to this build&rsquo;s versions: BIOS, BMC, CPLD, NIC, GPU</li><li>CPUs present and running at spec</li><li>Memory: every DIMM present at the right size and speed</li><li>PCIe: every link at its expected width and speed</li><li>SSDs present and healthy</li><li>GPUs and other ASICs present, with their links up</li><li>Every device answers on its data bus</li><li>Every sensor reads and is in range</li></ul></div>
+                <div><h4>Pass means</h4><p>Each blade is exactly what the build says it should be, part by part.</p><h4>What it catches</h4><p>A missing DIMM, a link that trained at x8 instead of x16 or a generation slow, a mis-seated SSD, a firmware mismatch.</p></div>
+              </div>
+            </section>
+
+            <section class="stage" id="st-runin" data-short="Run-in" data-log="stress cpu: all cores loaded, 0 errors|stress memory: pattern test, 0 uncorrectable errors|stress ssd: sustained read/write, no drops|stress gpu: full load, no resets|health: thermals, power, error counters in limits|PASS  run-in complete, no hangs">
+              <h3>Run-in <small>Stress the rack until weak parts fail here</small></h3>
+              <p>Hours of stress across CPUs, memory, SSDs and GPUs at once. Pretest proves a part works; run-in proves it keeps working when it is hot and busy. Weak parts tend to fail early in their life, and run-in is where that early life gets spent.</p>
+              <div class="stage-cols">
+                <div><h4>What it checks</h4><ul class="checks"><li>CPUs under full load</li><li>Memory under pattern stress</li><li>SSDs under sustained read and write</li><li>GPUs under full load</li><li>Temperatures, power and error counters within limits the whole time</li></ul></div>
+                <div><h4>Pass means</h4><p>The whole run finishes with no uncorrectable errors and corrected errors under threshold.</p><h4>What it catches</h4><p>Marginal memory, parts that fail young, cooling problems, links that drop only under load.</p></div>
+              </div>
+            </section>
+
+            <section class="stage" id="st-netblade" data-short="Network blade" data-log="cartridge: every compute-to-network link trained|comms: every compute blade reaches every other|fabric: 72/72 GPUs joined|PASS  the rack works as one machine" data-fail-log="!cartridge: 1 lane down on blade 07, port 3|!comms: blade 07 cannot reach 2 peers|!fabric: 71/72 GPUs joined, blade 07 gpu 2 missing|FAIL  rack sent to debug">
+              <h3>Network blade <small>Connect the compute blades to each other</small></h3>
+              <p>Until now each compute blade has been tested alone. Here they start talking to each other, through the network blades and the cable cartridge, the dense bundle of cables at the back of the rack that wires every compute blade to every network blade.</p>
+              <svg class="netfig" viewBox="0 0 440 196" role="img" aria-label="Diagram: six compute blades on the left, each cabled through the cable cartridge to all three network blades on the right">
+                <text x="65" y="14">Compute blades</text><text x="220" y="14">Cable cartridge</text><text x="375" y="14">Network blades</text>
+                <g class="cables"><path d="M112 36 C220 36 220 50 328 50"/><path d="M112 36 C220 36 220 106 328 106"/><path d="M112 36 C220 36 220 162 328 162"/><path d="M112 64 C220 64 220 50 328 50"/><path d="M112 64 C220 64 220 106 328 106"/><path d="M112 64 C220 64 220 162 328 162"/><path d="M112 92 C220 92 220 50 328 50"/><path d="M112 92 C220 92 220 106 328 106"/><path d="M112 92 C220 92 220 162 328 162"/><path d="M112 120 C220 120 220 50 328 50"/><path d="M112 120 C220 120 220 106 328 106"/><path d="M112 120 C220 120 220 162 328 162"/><path d="M112 148 C220 148 220 50 328 50"/><path class="bad" d="M112 148 C220 148 220 106 328 106"/><path d="M112 148 C220 148 220 162 328 162"/><path d="M112 176 C220 176 220 50 328 50"/><path d="M112 176 C220 176 220 106 328 106"/><path d="M112 176 C220 176 220 162 328 162"/></g>
+                <g class="blades"><rect x="20" y="28" width="92" height="16" rx="3"/><rect x="20" y="56" width="92" height="16" rx="3"/><rect x="20" y="84" width="92" height="16" rx="3"/><rect x="20" y="112" width="92" height="16" rx="3"/><rect x="20" y="140" width="92" height="16" rx="3"/><rect x="20" y="168" width="92" height="16" rx="3"/></g>
+                <g class="blades net"><rect x="328" y="34" width="92" height="32" rx="4"/><rect x="328" y="90" width="92" height="32" rx="4"/><rect x="328" y="146" width="92" height="32" rx="4"/></g>
+              </svg>
+              <div class="stage-cols">
+                <div><h4>What it checks</h4><ul class="checks"><li>Every link through the cable cartridge trains</li><li>Every compute blade talks to every other through the network blades</li><li>Every GPU joins the fabric: on a 72-GPU rack, all 72</li></ul></div>
+                <div><h4>Pass means</h4><p>The rack works as one machine, not as a stack of separate blades.</p><h4>What it catches</h4><p>A badly seated cartridge, a bent pin, a single bad lane, network-blade firmware problems.</p></div>
+              </div>
+            </section>
+
+            <section class="stage" id="st-nettest" data-short="Nettest" data-log="links: every port at expected speed and width|rdma: every NIC pair within bandwidth target|latency: within target under load|errors: counters clean after soak|PASS  network clean">
+              <h3>Nettest <small>Test the network itself</small></h3>
+              <p>With everything connected, the network gets tested as a network: every NIC, every port, every path the rack will use to talk to the rest of the cluster. RDMA/RoCE traffic runs between every pair, and error counters are watched through a soak.</p>
+              <div class="stage-cols">
+                <div><h4>What it checks</h4><ul class="checks"><li>Every port links up at the right speed and width</li><li>RDMA bandwidth between every NIC pair</li><li>Latency under load</li><li>Link error counters after a soak</li></ul></div>
+                <div><h4>Pass means</h4><p>Every path performs to target and stays clean under sustained traffic.</p><h4>What it catches</h4><p>Bad cables or optics, NIC firmware and configuration problems, marginal SerDes lanes. PRBS testing on a suspect lane separates the channel from the device.</p></div>
+              </div>
+            </section>
+
+            <section class="stage" id="st-fst" data-short="FST" data-log="firmware: every version matches the ship manifest|sensors: final sweep, 0 out of range|buses: final sweep, every device answered|config: default settings applied, test settings removed|PASS  ready to ship">
+              <h3>FST <small>Final system test, then factory defaults</small></h3>
+              <p>One last pass over the things most likely to have drifted while the rack was being tested and debugged: firmware versions, sensors and data buses. Then the rack is set back to its default settings, so the customer gets a clean machine, not a test fixture.</p>
+              <div class="stage-cols">
+                <div><h4>What it checks</h4><ul class="checks"><li>Firmware matches the ship manifest</li><li>Every sensor reads and is in range</li><li>Every device answers on its data bus</li><li>Default settings applied, test settings removed</li></ul></div>
+                <div><h4>Pass means</h4><p>The rack matches its ship configuration exactly.</p><h4>What it catches</h4><p>A setting left behind by debugging, a part swapped during repair without a re-check, a firmware image that never got re-flashed.</p></div>
+              </div>
+            </section>
+
+            <section class="stage" id="st-ship" data-short="Ship" data-log="rack released to shipping">
+              <h3>Ship <small>Released to the customer</small></h3>
+              <p>Every station passed, in order, on this rack. Its results are on record next to every other rack from the same build, which is what turns a single pass into evidence that the build is ready for mass production.</p>
+            </section>
+          </div>
+
+          <h3 class="sub">A failure, walked through</h3>
+          <p class="story-intro">A representative example of the kind of failure the line exists for. It&rsquo;s built from the class of problem, not from one program&rsquo;s details.</p>
+          <ol class="story">
+            <li><strong>Symptom</strong><span>At the network blade station, one GPU on a few racks fails to join the fabric after a cold boot. A warm reboot sometimes fixes it, which is the worst kind of failure: it passes a quick re-test.</span></li>
+            <li><strong>Hypotheses</strong><span>A marginal link on that GPU&rsquo;s path through the cable cartridge, a firmware race at power-on between the BMC, CPLD and GPU baseboard, or a stale fabric configuration left on the node.</span></li>
+            <li><strong>Isolation</strong><span>Rule out the setup first: re-provision over PXE and read the fabric logs from the start. Then run PRBS on the affected lanes, swap the blade into a known-good slot to see whether the fault follows the part or the position, and repeat cold boots with BMC and serial-console logs captured on every cycle.</span></li>
+            <li><strong>Root cause</strong><span>The fault stays with the position and only appears on cold boot: a power-sequencing timing problem that leaves some links not ready when fabric initialization starts.</span></li>
+            <li><strong>Fix</strong><span>The timing fix goes to the firmware team for the next release candidate, with reproduction steps and logs attached, and is verified on the next build.</span></li>
+            <li><strong>Prevention</strong><span>A cold-boot loop that checks every GPU has joined the fabric is added to the automated suite, so a regression shows up on the first rack of the next build.</span></li>
+          </ol>
+          <div class="links">
+            <a href="projects/rack-validation-method.html">Read the full method: why a test line, why the order matters, where automation fits <span class="arrow" aria-hidden="true">&rarr;</span></a>
           </div>
         </div>
       </div>
@@ -287,7 +391,8 @@
               <h3>How I validate a rack</h3>
               <p>How I take a rack-scale AI system from bring-up to a build that can go to mass production, layer by layer: signals (PRBS/SerDes, PCIe), fabrics (RDMA/RoCE, NVLink), BMC firmware (Redfish, IPMI, SOL), and the automation that keeps results repeatable from build to build. It covers the method and the class of problem, not the product.</p>
               <div class="links">
-                <a href="projects/rack-validation-method.html">Read the method <span class="arrow" aria-hidden="true">&rarr;</span></a>
+                <a href="projects/rack-validation-method.html">Read the full method <span class="arrow" aria-hidden="true">&rarr;</span></a>
+                <a href="#test-line">Step through the test line <span class="arrow" aria-hidden="true">&uarr;</span></a>
               </div>
             </div>
           </article>
@@ -333,7 +438,7 @@
               <a class="read" href="projects/rack-validation-method.html">
                 <span class="date">2026</span>
                 <span><span class="src">My writing</span><span class="t">How I validate a rack</span>
-                <span class="why">The layer-by-layer method I use from rack bring-up to mass production: signals, fabrics, BMC firmware and automation.</span></span>
+                <span class="why">The full method behind the test line above: why a rack goes through a fixed line of stations, why their order matters, and where automation fits.</span></span>
               </a>
             </li>
             <li>

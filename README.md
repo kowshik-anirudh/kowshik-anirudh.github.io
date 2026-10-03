@@ -1,13 +1,14 @@
 # anirudhkowshik / personal site
 
-A static, single-page site with plain HTML, CSS and a small JS file. It has no framework and no build step.
+A static, single-page site with plain HTML, CSS and two small JS files. It has no framework and no build step.
 
 ```
 website/
-  index.html        home page (hero, about, experience, skills, projects, reading, off the clock, contact)
+  index.html        home page (hero, test line, quick facts, about, experience, skills, projects, reading, off the clock, contact)
   projects/*.html   case studies and the rack-validation method page (share style.css)
   style.css         dark theme, layout, motion (respects prefers-reduced-motion)
   script.js         hero scope canvas, nav highlight, fallbacks for scroll effects (optional; the page works without it)
+  line.js           the interactive test line in the home page's #test-line section (optional; without it the stations read as plain text)
   favicon.svg       eye-diagram favicon
   404.html          custom not-found page (root-absolute paths; assumes the user site at /)
   robots.txt, sitemap.xml  crawler hints; add new pages to sitemap.xml
@@ -20,8 +21,10 @@ website/
 - The hero line is "I try to break AI server racks on purpose, so they don't break by accident." It also appears in `og:description`; change both together.
 - The hero is led by the full, uncropped portrait (`images/profile-{480,640,800}.webp` with `profile-480.jpg`, `profile-640.jpg` and `profile.jpg` as the JPEG fallback). It is the LCP element, so it has `fetchpriority="high"` and is never lazy-loaded. The sizes were made from `profile.jpg` with Pillow; the source is 800x1000, so nothing larger is generated.
 - An **oscilloscope** inset sits over the lower-left of the portrait: a `<canvas>` that draws a simulated PRBS7 eye diagram with persistence (`script.js`). It only animates while it is on screen and the tab is visible, and shows a single static frame under `prefers-reduced-motion`. Pointing at it (or tapping it on touch screens) adds jitter, it gets a little more jittery as it scrolls away, and the eye-height/width readout is measured from the traces actually drawn. Without JS, or if the GPU drops the canvas, a static SVG eye (`images/eye-fallback.svg`) shows instead, so the box is never empty.
+- **Test line** (`#test-line`, "Here's what I do"): the first section after the hero. Seven `.stage` sections inside `<div class="line" data-line>`, each with its console lines in `data-log` (and `data-fail-log` on the station that fails in "Show a failure" mode); `line.js` turns them into a rail with a rack that travels along it. The six-step failure walk-through (`.story`) follows, then a link to the method page, which keeps the longer prose and points back here instead of repeating the line. Program names stay out of this section and the hero.
+- **Hero teaser** (`.teaser`): a link under the hero buttons that scrolls to `#test-line`. Seven dots light up in order and the fourth (Network blade) turns red; the outcome is left for the section below. It is CSS only (opacity and transform), its resting state is the failed frame (which is what reduced motion shows), and `script.js` pauses it when the hero is off screen, its text has faded out, or the tab is hidden. It shares the pinned stage with the rest of the hero text: if that text grows taller than one screen, `script.js` drops the pinned-hero effect, so keep the hero copy short.
 - **Scroll motion** is native CSS scroll-driven animation (`animation-timeline: scroll()` / `view()`, Chrome/Edge 115+, Safari 26+): a thin progress line, a nav whose glass firms up as you leave the top, the portrait growing slightly and fading as the hero leaves while the text lags and the scope runs ahead, and sections easing in as they enter. Only `translate`, `scale`, `transform` and `opacity` animate. Browsers without support get a small rAF fallback from `script.js`; `prefers-reduced-motion: reduce` turns all of it off. Page-to-page navigation uses a short cross-document view transition (`@view-transition`).
-- **Cache busting:** every page loads `style.css?v=YYYYMMDD` and `script.js?v=YYYYMMDD`. GitHub Pages caches assets for about 10 minutes, so **bump the date on every page whenever you change `style.css` or `script.js`**, or a visitor can get new HTML with an old stylesheet.
+- **Cache busting:** every page loads `style.css?v=YYYYMMDD` and `script.js?v=YYYYMMDD` (the home page also loads `line.js?v=YYYYMMDD`). GitHub Pages caches assets for about 10 minutes, so **bump the date on every page whenever you change `style.css`, `script.js` or `line.js`**, or a visitor can get new HTML with an old stylesheet. For a second change on the same day, add a letter (`20261003b`).
 - Fonts: Bricolage Grotesque (display headings) with IBM Plex Sans and IBM Plex Mono (body and labels), from Google Fonts. Every page loads the same font URL.
 - Placeholders the owner still has to fill in are marked `[TODO Tn: ...]` in text (styled with a dashed amber outline by `.todo`) and `TODO-Tn` in attributes. Search for `TODO` to find them all.
 - The About section's "stack" panel is styled as a 6U rack: lit units are where he works today.
@@ -85,5 +88,5 @@ Check GitHub's current docs before changing DNS: https://docs.github.com/en/page
 ## Updating content
 
 - **Reading list:** each entry in `#reading` has a title link, source, date and a one-line note. Refresh it every few months so it stays current.
-- **Projects:** `#projects` leads with the validation method (`projects/rack-validation-method.html`) and a slot for a public tool, then MarketPulse, then the earlier data-engineering work as a compact `.mini` list. New case studies can copy `projects/marketpulse.html` (`.project`, `.flow`, `.points`).
+- **Projects:** `#projects` leads with the validation method (`projects/rack-validation-method.html`, the longer read behind the home page's test line) and a slot for a public tool, then MarketPulse, then the earlier data-engineering work as a compact `.mini` list. New case studies can copy `projects/marketpulse.html` (`.project`, `.flow`, `.points`).
 - **Skills:** the `#skills` section mirrors the skill groups in the resume. Groups marked `primary` (hardware validation, networking) get the accent styling; keep them first.

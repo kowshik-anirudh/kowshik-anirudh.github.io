@@ -1,4 +1,4 @@
-// Interactive test line for the method page. Without JS the stations read
+// Interactive test line on the home page (#test-line). Without JS the stations read
 // as a plain article; with it they become a rail you can step through or run.
 // Paced for reading: each log line types out, its matching check lights up
 // and ticks, and there is a beat before the next. Reduced motion gets the

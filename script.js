@@ -45,6 +45,7 @@
       textEl.style.transform = ''; textEl.style.opacity = '';
       var want = window.innerWidth >= 960 && vh >= 600;
       hero.classList.toggle('pin', want);
+      hero.classList.remove('text-out');
       // the stage must hold the whole hero text, or pinning would hide some of it
       if (want && textEl.getBoundingClientRect().height > vh - navH() - 24) { want = false; hero.classList.remove('pin'); }
       pinned = want;
@@ -88,6 +89,7 @@
       textEl.style.transform = 'translate3d(' + (-3 * t).toFixed(2) + 'vw,0,0) scale(' + (1 - 0.03 * t).toFixed(4) + ')';
       textEl.style.opacity = (1 - t).toFixed(3);
       textEl.style.visibility = t >= 1 ? 'hidden' : '';
+      hero.classList.toggle('text-out', t >= 1); // pauses the teaser loop
     }
   };
   var request = function () { if (!ticking) { ticking = true; requestAnimationFrame(onFrame); } };
@@ -110,7 +112,8 @@
         }
       });
     }, { rootMargin: '-45% 0px -50% 0px' });
-    document.querySelectorAll('main section[id]').forEach(function (s) { spy.observe(s); });
+    // top-level sections only: the test line's stations are sections with ids too
+    document.querySelectorAll('main > section[id]').forEach(function (s) { spy.observe(s); });
   }
 
   var y = document.getElementById('year');
@@ -318,5 +321,6 @@
   var pauser = new IntersectionObserver(function (entries) {
     entries.forEach(function (e) { e.target.classList.toggle('paused', !e.isIntersecting); });
   });
-  document.querySelectorAll('.hero, .stack').forEach(function (el) { pauser.observe(el); });
+  document.querySelectorAll('.hero, .stack, .line').forEach(function (el) { pauser.observe(el); });
+  document.addEventListener('visibilitychange', function () { root.classList.toggle('tab-hidden', document.hidden); });
 })();

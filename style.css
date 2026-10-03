@@ -22,6 +22,7 @@
   --display: "Bricolage Grotesque", "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --todo: #f2b84b;        /* owner placeholders only */
+  --fail: #ef8a7d;        /* a failed station on the test line */
 
   /* type scale (1.25 minor third-ish, fluid at the top end) */
   --fs-xs: .75rem;
@@ -136,9 +137,9 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 
 /* The scope: a canvas eye diagram over a static SVG fallback, so it is never empty.
    It sits under the buttons as a small instrument, with its caption beside it. */
-.hero-scope { display: flex; align-items: center; gap: 1.25rem; margin-top: 2.25rem; }
+.hero-scope { display: flex; align-items: center; gap: 1.25rem; margin-top: 1.5rem; }
 .scope {
-  position: relative; flex: none; margin: 0; width: clamp(190px, 17vw, 250px);
+  position: relative; flex: none; margin: 0; width: clamp(190px, 14vw, 200px);
   padding: .45rem .45rem .35rem; border-radius: calc(var(--radius) + 2px);
   background: rgba(12, 13, 16, .86); border: 1px solid var(--line-strong);
   -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
@@ -212,6 +213,56 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .btn-ghost { border-color: transparent; background: transparent; color: var(--muted); padding: 0 .75rem; }
 .btn-ghost:hover { border-color: transparent; color: var(--accent); }
 
+/* ---------- Hero teaser: a small preview of the test line ----------
+   A link to #test-line. Seven stations light up in order and the fourth
+   (Network blade) fails; what happens next is in the section below. The
+   resting state, which is also the reduced-motion state, is the failed frame.
+   Only opacity and transform animate, and nothing changes size. */
+.teaser {
+  display: flex; align-items: center; gap: .6rem 1.1rem; width: fit-content; max-width: 100%;
+  margin-top: 1.5rem; padding: .65rem 1rem; border: 1px solid var(--line); border-radius: var(--radius);
+  background: rgba(19, 21, 25, .6); color: var(--text); text-decoration: none;
+  transition: border-color .25s var(--ease), background .25s var(--ease);
+}
+.teaser:hover { color: var(--text); border-color: var(--accent-line); background: rgba(25, 28, 34, .8); }
+.teaser:hover .arrow { transform: translateY(3px); }
+.teaser-strip { position: relative; flex: none; display: flex; align-items: center; justify-content: space-between; width: 9.5rem; height: 20px; }
+.teaser-strip::before { content: ""; position: absolute; left: 5px; right: 5px; top: 50%; height: 1px; margin-top: -.5px; background: var(--line-strong); }
+.teaser-strip i { position: relative; width: 10px; height: 10px; border-radius: 50%; background: var(--bg); box-shadow: inset 0 0 0 1.5px var(--line-strong); }
+.teaser-strip i::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: var(--accent); opacity: 0; animation-play-state: var(--play, running); }
+.teaser-strip i:nth-child(-n+4)::after { opacity: 1; }
+.teaser-strip i:nth-child(4)::after { background: var(--fail); box-shadow: 0 0 0 4px rgba(239, 138, 125, .18); }
+/* the ring that marks the station under test: its box spans first dot centre to last */
+.teaser-at { position: absolute; left: 5px; right: 5px; top: 0; bottom: 0; opacity: 0; transform: translateX(50%); pointer-events: none; animation-play-state: var(--play, running); }
+.teaser-at::before { content: ""; position: absolute; left: -10px; top: 0; width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid var(--accent); }
+.teaser-text { display: grid; gap: .1rem; min-width: 0; line-height: 1.35; }
+.teaser-cue { font-size: .95rem; font-weight: 500; }
+.teaser-cue .arrow { color: var(--accent); }
+.teaser-note { font-family: var(--mono); font-size: .7rem; letter-spacing: .02em; color: var(--fail); animation-play-state: var(--play, running); }
+@media (prefers-reduced-motion: no-preference) {
+  .teaser-strip i:nth-child(1)::after { animation-name: teaser-1; }
+  .teaser-strip i:nth-child(2)::after { animation-name: teaser-2; }
+  .teaser-strip i:nth-child(3)::after { animation-name: teaser-3; }
+  .teaser-strip i:nth-child(4)::after, .teaser-note { animation-name: teaser-4; }
+  .teaser-at { animation-name: teaser-at; }
+  .teaser-strip i::after, .teaser-note, .teaser-at { animation-duration: 12s; animation-timing-function: var(--ease); animation-iteration-count: infinite; }
+}
+/* 12 s loop: three passes, the failure, a long hold, a short reset */
+@keyframes teaser-1 { 0%, 6% { opacity: 0; } 9%, 93% { opacity: 1; } 97%, 100% { opacity: 0; } }
+@keyframes teaser-2 { 0%, 20% { opacity: 0; } 23%, 93% { opacity: 1; } 97%, 100% { opacity: 0; } }
+@keyframes teaser-3 { 0%, 34% { opacity: 0; } 37%, 93% { opacity: 1; } 97%, 100% { opacity: 0; } }
+@keyframes teaser-4 { 0%, 48% { opacity: 0; } 51%, 93% { opacity: 1; } 97%, 100% { opacity: 0; } }
+@keyframes teaser-at {
+  0% { opacity: 0; transform: translateX(0); }
+  3%, 10% { opacity: 1; transform: translateX(0); }
+  15%, 24% { opacity: 1; transform: translateX(16.667%); }
+  29%, 38% { opacity: 1; transform: translateX(33.333%); }
+  43%, 49% { opacity: 1; transform: translateX(50%); }
+  52%, 100% { opacity: 0; transform: translateX(50%); }
+}
+/* paused while the hero is off screen, its text has faded out, or the tab is hidden (script.js) */
+.hero.paused .teaser, .hero.text-out .teaser, .tab-hidden .teaser { --play: paused; }
+
 
 /* Quick facts strip */
 .facts { display: grid; grid-template-columns: 1fr; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
@@ -234,6 +285,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 /* ---------- Sections: label column + content column ---------- */
 .section { padding-top: clamp(4.5rem, 12vh, 7.5rem); }
 .section-grid { display: grid; gap: 1.25rem; }
+.section-grid > * { min-width: 0; } /* wide children (the test line's rail) scroll inside the column */
 @media (min-width: 900px) {
   .section-grid { grid-template-columns: 190px minmax(0, 1fr); gap: 3.5rem; }
   .sec-head { position: sticky; top: calc(var(--nav-h) + 2rem); align-self: start; }
@@ -648,7 +700,7 @@ body::after {
 .mini-t { font-weight: 500; }
 .mini-d { color: var(--muted); font-size: .9rem; }
 
-/* ---------- Method page ---------- */
+/* ---------- Failure walk-through (home page) and method page ---------- */
 .draft-note { margin: 0 0 1rem; }
 .flow-5 li { font-size: .86rem; }
 .story { display: grid; gap: .6rem; max-width: 46rem; counter-reset: s; }
@@ -666,12 +718,17 @@ body::after {
 @media (max-width: 959px) {
   .hero-grid { gap: 0; }
   .hero-text { display: contents; }
-  .hero-text .cta { order: 3; margin: 0 0 2.25rem; }
+  .hero-text .cta { order: 3; margin: 0 0 1rem; }
+  .teaser { order: 3; width: auto; margin: 0 0 2.25rem; }
   .hero-visual { order: 4; margin-bottom: 2.25rem; }
   .hero-text .pitch { order: 5; margin: 0; }
   .hero-scope { order: 6; margin-top: 2rem; }
 }
-@media (max-width: 479px) { .hero-scope { flex-direction: column; align-items: flex-start; } .scope { width: 100%; max-width: 320px; } }
+@media (max-width: 479px) {
+  .hero-scope { flex-direction: column; align-items: flex-start; } .scope { width: 100%; max-width: 320px; }
+  .teaser { flex-direction: column; align-items: stretch; }
+  .teaser-strip { width: auto; }
+}
 @media (max-width: 599px) {
   .hero-text .cta { gap: .5rem; }
   .hero-text .pitch { font-size: var(--fs-base); }
@@ -689,6 +746,7 @@ body::after {
   .nav-inner { gap: .6rem; }
   .nav ul { gap: .7rem; padding-right: 0; }
   .nav li a { font-size: .78rem; }
+  .nav .nav-line { display: none; } /* no room at phone width; the hero teaser links there */
   .nav nav { -webkit-mask-image: none; mask-image: none; }
 }
 @media (max-width: 349px) {
@@ -722,16 +780,24 @@ body::after {
   .hero .status { margin-bottom: .9rem; }
   .hero-line { margin: 1rem 0 1.1rem; }
   .cta { margin-top: 1.4rem; }
-  .hero-scope { margin-top: 1.4rem; }
-  .scope { width: 170px; }
+  .teaser { margin-top: 1.1rem; }
+  .hero-scope { margin-top: 1.1rem; }
+  .scope { width: 150px; }
   .scope-readout .scope-meas { display: none; }
 }
 
-/* ---------- Method page: the interactive test line (projects/line.js) ----------
+/* ---------- Home page: the interactive test line (line.js) ----------
    Without JS every station reads as its own short section. With JS the
    stations become a rail with a rack that travels along it, a console, and
    one station shown at a time. */
-.line { --fail: #ef8a7d; margin: 1.75rem 0 0; }
+/* the hero teaser lands here with the section's top edge right under the nav */
+#test-line { scroll-margin-top: -16px; }
+#test-line + .wrap .facts { margin-top: clamp(3rem, 8vh, 4.5rem); }
+.line { margin: 1.75rem 0 0; }
+.line p, .line li, .story li, .story-intro { color: var(--muted); }
+.line strong { color: var(--text); font-weight: 500; }
+.story-intro { max-width: 44rem; }
+.story + .links { margin-top: 0; }
 .stage { padding: 1.5rem 0 .5rem; border-top: 1px solid var(--line); }
 .stage h3 { font-family: var(--display); font-size: 1.35rem; font-weight: 600; letter-spacing: -0.015em; color: var(--text); margin-bottom: .6rem; }
 .stage h3 small { display: block; font-family: var(--font); font-size: .95rem; font-weight: 400; letter-spacing: 0; color: var(--accent); margin-top: .2rem; }
@@ -811,6 +877,7 @@ body::after {
 
 .line-ctl { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem 1.25rem; margin: 1.25rem 0 1rem; }
 .line-ctl .btn { min-height: 40px; }
+.line-ctl [hidden] { display: none; } /* .btn sets display, which would un-hide Pause */
 .line-fault { display: inline-flex; align-items: center; gap: .5rem; font-size: .9rem; color: var(--muted); cursor: pointer; }
 .line-fault input { width: 1rem; height: 1rem; accent-color: var(--fail); }
 .line-status { flex-basis: 100%; margin: 0; min-height: 1.5em; font-size: .9rem; color: var(--text); }
@@ -840,6 +907,8 @@ body::after {
   .line-row.is-typing > span:last-child::after { content: ""; display: inline-block; width: .5em; height: 1em; margin-left: 2px; vertical-align: -.15em; background: currentColor; animation: caret .8s steps(1) infinite; }
   .line-rack { animation: rack-bob 2.4s ease-in-out infinite; }
   .line.is-paused .line-rack, .line:not(.is-live) .line-rack { animation-play-state: paused; }
+  /* off screen or in a hidden tab (script.js) */
+  .line.paused .line-rack, .line.paused .netfig .cables path, .tab-hidden .line-rack, .tab-hidden .netfig .cables path { animation-play-state: paused; }
 }
 @keyframes checking { 50% { box-shadow: 0 0 0 4px var(--accent-soft); } }
 @keyframes stage-in { from { opacity: 0; translate: 0 10px; } }
