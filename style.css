@@ -1161,3 +1161,10 @@ body::after {
 .story li > strong { padding-top: .2rem; font-family: var(--display); font-size: 1.15rem; font-weight: 600; letter-spacing: -0.01em; line-height: 1.3; color: var(--text); }
 .story li:first-child > strong { color: var(--fail); }
 .story-wrap + .links { margin-top: 2.25rem; }
+
+/* very narrow phones (360px Androids, iPhone SE): keep all five nav links on screen */
+@media (max-width: 380px) {
+  .nav-inner { gap: .5rem; }
+  .nav ul { gap: .5rem; }
+  .nav li a { font-size: .72rem; }
+}

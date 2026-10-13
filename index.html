@@ -40,9 +40,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20261003c">
-  <script defer src="script.js?v=20261003c"></script>
-  <script defer src="line.js?v=20261003c"></script>
+  <link rel="stylesheet" href="style.css?v=20261013a">
+  <script defer src="script.js?v=20261013a"></script>
+  <script defer src="line.js?v=20261013a"></script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -77,7 +77,7 @@
             <a class="btn btn-primary" href="https://www.linkedin.com/in/anirudh-kowshik262026" target="_blank" rel="noopener">LinkedIn <span class="arrow" aria-hidden="true">&#8599;</span></a>
             <a class="btn" href="resume.pdf">R&eacute;sum&eacute; (PDF)</a>
             <a class="btn" href="mailto:i.anirudh.kowshik@gmail.com">Email</a>
-            <a class="btn" href="https://github.com/kowshik-anirudh" target="_blank" rel="noopener">GitHub <span class="arrow" aria-hidden="true">&#8599;</span></a>
+            <a class="btn" href="contact.vcf" type="text/vcard">Save contact</a>
           </div>
           <a class="teaser" href="#test-line">
             <span class="teaser-strip" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b class="teaser-at"></b></span>
@@ -232,7 +232,7 @@
           <div class="about-grid">
             <div class="prose">
               <p>I'm a systems validation engineer at Quanta Manufacturing in Fremont, California. I've taken next-generation AI racks and OCP server platforms through NPI: bringing racks up, verifying their GPU and RDMA/RoCE fabrics, hardening BMC firmware, and tracing link failures down to PCIe and SerDes. Large AI jobs depend on every GPU and link in a rack working correctly, and validation is where problems get caught before they reach a production cluster.</p>
-              <p>I came to hardware through software: production Kubernetes on AKS and OpenShift at Unisys, Kafka-based data pipelines into Azure at DLL, then a production RAG assistant at ResMed. That range helps in validation. When a failure crosses the line between hardware, firmware and software, I can follow it across instead of handing it off, and I turn repetitive checks into Python and Bash automation so results stay repeatable from build to build.</p>
+              <p>I came to hardware through software: bare-metal Kubernetes and Slurm compute at Unisys, Kafka-based data pipelines into Azure at DLL, then a production RAG assistant at ResMed. That range helps in validation. When a failure crosses the line between hardware, firmware and software, I can follow it across instead of handing it off, and I turn repetitive checks into Python and Bash automation so results stay repeatable from build to build.</p>
               <p>Next, I want to keep building in AI infrastructure: rack-scale systems, GPU fabrics and the reliability of the clusters built from them. Alongside my job, I'm pursuing an executive PhD in Information Technology, with a concentration in Computer Engineering, at the University of the Cumberlands.</p>
             </div>
             <aside class="stack" aria-label="Layers of the stack I have worked across">
@@ -240,7 +240,7 @@
               <ol>
                 <li><span class="u" aria-hidden="true">U6</span><span><span class="layer">Models</span><span class="what">RAG, Bedrock, PyTorch, forecasting</span></span><span class="where">ResMed</span></li>
                 <li><span class="u" aria-hidden="true">U5</span><span><span class="layer">Data</span><span class="what">Kafka, Azure Data Lake, SQL/ETL</span></span><span class="where">DLL</span></li>
-                <li><span class="u" aria-hidden="true">U4</span><span><span class="layer">Platform</span><span class="what">Kubernetes on AKS and OpenShift</span></span><span class="where">Unisys</span></li>
+                <li><span class="u" aria-hidden="true">U4</span><span><span class="layer">Platform</span><span class="what">Bare metal, Kubernetes, Slurm</span></span><span class="where">Unisys</span></li>
                 <li class="now"><span class="u" aria-hidden="true">U3</span><span><span class="layer">Firmware</span><span class="what">BMC: Redfish, IPMI, SOL</span></span><span class="where">Quanta</span></li>
                 <li class="now"><span class="u" aria-hidden="true">U2</span><span><span class="layer">Fabric</span><span class="what">GPU fabric, RDMA/RoCE, PXE</span></span><span class="where">Quanta</span></li>
                 <li class="now"><span class="u" aria-hidden="true">U1</span><span><span class="layer">Signals</span><span class="what">PRBS/SerDes, PCIe, NVMe, retimers</span></span><span class="where">Quanta</span></li>
@@ -269,7 +269,7 @@
                 <div class="role-head"><h3>Systems Validation Engineer</h3></div>
                 <p class="headline">Took next-generation rack-scale AI systems and hyperscaler OCP server platforms through NPI toward mass production, gating each build with test plans, firmware validation and failure debug, and driving fixes back to hardware and firmware teams.</p>
                 <ul>
-                  <li><b>Rack bring-up.</b> Validated 40+ NVIDIA GB300 and VR200 AI racks and custom ASIC-based Meta OCP server racks through every development phase (EVT, DVT, PVT) toward mass production, across 4 NPI builds, by using PXE network boot to provision multi-host test environments for L10&ndash;L12 rack bring-up.</li>
+                  <li><b>Rack bring-up.</b> Took NVIDIA GB300 and VR200 AI racks and custom ASIC-based Meta OCP server racks through every development phase (EVT, DVT, PVT) toward mass production, across 4 NPI builds, using PXE network boot to provision multi-host test environments for L10&ndash;L12 rack bring-up.</li>
                   <li><b>GPU and network fabrics.</b> Caught link, connectivity and configuration failures at rack level before they could reach production AI clusters (35+ issues caught before mass production), by verifying RDMA/RoCE across NICs, network modules and the full rack topology on every build, and by debugging NVLink switch fabric issues with NVIDIA Fabric Manager, tracing GPUs that failed to join the fabric back to link, firmware or configuration faults, so each rack came up with all 72 GPUs on the NVLink fabric.</li>
                   <li><b>Test automation.</b> Automated about 60% of manual rack checks, saving roughly two engineer-days per build, by replacing repetitive manual checks with Python/Bash automation, a hardened Python/YAML test framework and log-parsing tooling, which made rack-level validation results repeatable across builds.</li>
                   <li><b>Signal integrity.</b> Root-caused 20+ PCIe, NIC, NVMe and retimer link failures across hardware, firmware and test infrastructure, isolating them with PRBS/SerDes testing so fixes landed in the next board rev or firmware RC.</li>
@@ -318,15 +318,15 @@
                 <span class="role-where">Remote (India)</span>
               </div>
               <div>
-                <div class="role-head"><h3>Software Engineer</h3><span class="impact"><b>&minus;35%</b> cluster-management overhead</span></div>
-                <p class="headline">Kept multi-cluster production Kubernetes on AKS and Red Hat OpenShift reliable and recoverable, provisioning clusters with Velero-based disaster recovery and resilient persistent storage on Rook and Longhorn.</p>
+                <div class="role-head"><h3>Software Engineer</h3><span class="impact"><b>30+</b> bare-metal nodes provisioned</span></div>
+                <p class="headline">Built compute infrastructure from the metal up: bare-metal Kubernetes clusters for staging, and Azure VMs running Slurm batch workloads for heavy data processing.</p>
                 <ul>
-                  <li><b>Multi-cloud visibility.</b> Cut cluster-management overhead 35% by building a hybrid dashboard giving one view of every cluster across clouds.</li>
-                  <li><b>Secrets management.</b> Reduced manual credential work 60% across cross-platform services by moving secrets and service discovery onto HashiCorp Vault and Consul, so services pulled credentials securely instead of relying on hand-managed secrets.</li>
-                  <li><b>Release security.</b> Cut release-cycle effort 20% by building automated Trivy vulnerability scanning into the Azure DevOps release pipeline, keeping every production workload compliant on each release without manual security reviews.</li>
-                  <li><b>Networking and on-call.</b> Kept production traffic flowing by owning Calico networking, network policies and ingress, shipping infrastructure changes through Terraform and Helm, and leading on-call root-cause analysis across clusters with ELK and Falco.</li>
+                  <li><b>Bare metal to Kubernetes.</b> Provisioned 30+ on-prem bare-metal nodes with Terraform and Ansible playbooks, then stood up 3 Tanzu Kubernetes clusters on top to give 2 engineering teams their staging environments.</li>
+                  <li><b>Cluster monitoring.</b> Built Prometheus and Grafana monitoring for node metrics, pod storage alerts and cluster resource usage.</li>
+                  <li><b>Slurm batch workloads.</b> Managed 20+ Azure VMs with Terraform modules and Ansible-automated patching, and wrote the Slurm job templates and sbatch scripts that sized memory per job so runs completed without out-of-memory kills. Tracked queue depth and node utilization in Grafana.</li>
+                  <li><b>Release security.</b> Cut release-cycle effort 20% by building automated Trivy vulnerability scanning into the Azure DevOps release pipeline.</li>
                 </ul>
-                <ul class="tags" aria-label="Tools"><li>Kubernetes</li><li>AKS</li><li>OpenShift</li><li>Velero</li><li>Vault</li><li>Consul</li><li>Terraform</li><li>Helm</li><li>Calico</li><li>Trivy</li><li>ELK</li><li>Falco</li></ul>
+                <ul class="tags" aria-label="Tools"><li>Bare metal</li><li>Terraform</li><li>Ansible</li><li>Kubernetes</li><li>VMware Tanzu</li><li>Slurm</li><li>Azure</li><li>Prometheus</li><li>Grafana</li><li>Trivy</li></ul>
               </div>
             </li>
           </ol>
@@ -360,11 +360,11 @@
             </div>
             <div class="skill-group primary">
               <dt>Networking</dt>
-              <dd><ul><li>NVLink</li><li>NVSwitch</li><li>NVIDIA Fabric Manager</li><li>RDMA</li><li>RoCE</li><li>Calico CNI</li><li>Kubernetes network policies</li></ul></dd>
+              <dd><ul><li>NVLink</li><li>NVSwitch</li><li>NVIDIA Fabric Manager</li><li>RDMA</li><li>RoCE</li></ul></dd>
             </div>
             <div class="skill-group">
               <dt>Cloud &amp; platform</dt>
-              <dd><ul><li>Kubernetes (AKS, OpenShift)</li><li>Helm</li><li>Terraform</li><li>Vault</li><li>CI/CD (Azure DevOps)</li><li>ELK</li><li>Falco</li><li>AWS</li><li>Azure</li><li>GCP</li></ul></dd>
+              <dd><ul><li>Bare-metal provisioning</li><li>Kubernetes (Tanzu)</li><li>Slurm</li><li>Terraform</li><li>Ansible</li><li>Prometheus/Grafana</li><li>Trivy</li><li>CI/CD (Azure DevOps)</li><li>AWS</li><li>Azure</li><li>GCP</li></ul></dd>
             </div>
             <div class="skill-group">
               <dt>Programming &amp; ML</dt>
@@ -532,6 +532,7 @@
           <div class="cta">
             <a class="btn btn-primary" href="https://www.linkedin.com/in/anirudh-kowshik262026" target="_blank" rel="noopener">Message me on LinkedIn <span class="arrow" aria-hidden="true">&#8599;</span></a>
             <a class="btn" href="resume.pdf">R&eacute;sum&eacute; (PDF)</a>
+            <a class="btn" href="contact.vcf" type="text/vcard">Save contact</a>
             <a class="btn" href="mailto:i.anirudh.kowshik@gmail.com">Email</a>
             <a class="btn" href="https://github.com/kowshik-anirudh" target="_blank" rel="noopener">GitHub <span class="arrow" aria-hidden="true">&#8599;</span></a>
           </div>

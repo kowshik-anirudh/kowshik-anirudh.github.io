@@ -1,0 +1,13 @@
+BEGIN:VCARD
+VERSION:3.0
+N:Kowshik;Anirudh;;;
+FN:Anirudh Kowshik
+ORG:Quanta Manufacturing
+TITLE:Systems Validation Engineer\, AI Infrastructure
+EMAIL;TYPE=INTERNET,PREF:i.anirudh.kowshik@gmail.com
+URL:https://kowshik-anirudh.github.io/
+item1.URL:https://www.linkedin.com/in/anirudh-kowshik262026
+item1.X-ABLabel:LinkedIn
+ADR;TYPE=WORK:;;;San Francisco Bay Area;CA;;USA
+NOTE:Rack-scale AI validation: GPU fabrics\, BMC firmware\, NPI to mass production.
+END:VCARD
